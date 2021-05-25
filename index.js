@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const express = require('express');
 const app = express();
-const port = 80;
+const port = process.env.PORT || 5000;
 
 const { CardCreator } = require('./create-card');
 
@@ -43,6 +43,10 @@ app.get('/characters/name/:world/:charName', async (req, res) => {
     }catch(error){
         res.send(error);
     }
+})
+
+app.get('/', async (req, res) => {
+    res.redirect('https://github.com/ArcaneDisgea/XIV-Character-Cards');
 })
 
 app.listen(port, () => {
