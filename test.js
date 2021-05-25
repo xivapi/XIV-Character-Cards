@@ -1,5 +1,5 @@
 const fs = require("fs");
-const createCard = require("./index").createCard;
+const createCard = require("./create-card").createCard;
 
 createCard("9575452", (png) => {
     const data = png.replace(/^data:image\/\w+;base64,/, "");
