@@ -8,7 +8,7 @@ const { CardCreator } = require('./create-card');
 const creator = new CardCreator();
 creator.init();
 
-app.get('/characters/id/:charaId', async (req, res) => {
+app.get('/characters/id/:charaId.png', async (req, res) => {
     try {
         const png = await creator.createCard(req.params.charaId);
 
@@ -23,7 +23,11 @@ app.get('/characters/id/:charaId', async (req, res) => {
     }
 })
 
-app.get('/characters/name/:world/:charName', async (req, res) => {
+app.get('/characters/id/:charaId', async (req, res) => {
+    res.redirect(`/characters/id/${req.params.charaId}.png`);
+})
+
+app.get('/characters/name/:world/:charName.png', async (req, res) => {
     var response = await fetch(`https://xivapi.com/character/search?name=${req.params.charName}&server=${req.params.world}`);
     var data = await response.json();
     
@@ -45,6 +49,10 @@ app.get('/characters/name/:world/:charName', async (req, res) => {
     }catch(error){
         res.send(error);
     }
+})
+
+app.get('/characters/name/:world/:charName', async (req, res) => {
+    res.redirect(`/characters/name/${req.params.world}/${req.params.charName}.png`);
 })
 
 app.get('/', async (req, res) => {
