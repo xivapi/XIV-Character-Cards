@@ -7,6 +7,7 @@ registerFont('SourceSansPro-SemiBold.ttf', { family: 'Source Sans Pro', style: '
 
 const primary = "rgba(178, 214, 249, 1)";
 const white = "rgba(255, 255, 255,1)";
+const grey = "#868686";
 const black = "rgba(0,0,0,0.5)";
 const small = '"18px "Source Sans Pro"';
 const med = '30px "Source Sans Pro"';
@@ -22,6 +23,9 @@ const fcCrestCol = 345;
 class CardCreator {
   async init() {
     this.bgImage = await loadImage("./chara_n.png");
+
+    this.imgMinion = await loadImage("./minion.png");
+    this.imgMount = await loadImage("./mount.png");
 
     this.imgAlchemist = await loadImage("./cj/1/alchemist.png");
     this.imgArmorer = await loadImage("./cj/1/armorer.png");
@@ -59,10 +63,26 @@ class CardCreator {
     this.imgRedmage = await loadImage("./cj/1/redmage.png");
 
     this.imgBluemage = await loadImage('./cj/1/bluemage.png');
+
+    await this.countMountsMinions();
+  }
+
+  async countMountsMinions() {
+    var response = await fetch(`https://xivapi.com/Companion`);
+    var data = await response.json();
+
+    this.countMinion = data.Pagination.ResultsTotal;
+
+    var response = await fetch(`https://xivapi.com/Mount`);
+    var data = await response.json();
+
+    this.countMount = data.Pagination.ResultsTotal;
+
+    console.log(`Refreshed counts: ${this.countMinion} - ${this.countMount}`);
   }
 
   async createCard(charaId) {
-    var response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC`);
+    var response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
     var data = await response.json();
 
     const canvas = createCanvas(890, 600);
@@ -77,17 +97,22 @@ class CardCreator {
     ctx.strokeStyle = white;
     ctx.fillStyle = black;
     ctx.beginPath();
-    ctx.fillRect(464, 7, 400, 100);
-    ctx.fillRect(464, 120, 400, 50);
-    ctx.fillRect(464, 185, 400, 205);
+    ctx.fillRect(464, 7, 400, 120);
+
+    ctx.fillRect(464, 135, 195, 40);
+    ctx.fillRect(669, 135, 195, 40);
+
+    ctx.fillRect(464, 183, 400, 205);
     ctx.fillRect(464, 405, 400, 175);
     ctx.stroke();
     ctx.textAlign = "center";
     ctx.font = med;
     ctx.fillStyle = primary;
     ctx.fillText(data.Character.Title.Name, 665, 45);
-    ctx.font = med;
-    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, 155);
+    ctx.font = small;
+    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, 115);
+
+
     // Race, Clan, Guardian, GC, FC Titles
     ctx.font = small;
     ctx.textAlign = "left";
@@ -140,9 +165,30 @@ class CardCreator {
       ctx.fillText(data.Character.FreeCompanyName, 480, 380);
     }
 
+    // Minion & Mount percentages
+    const mountsPct = Math.ceil((data.Mounts.length / this.countMount) * 100);
+    const minionsPct = Math.ceil((data.Minions.length / this.countMinion) * 100);
+
+    const mountsMeasure = ctx.measureText(`${mountsPct}%`);
+    const minionsMeasure = ctx.measureText(`${minionsPct}%`);
+
+    ctx.fillText(`${mountsPct}%`, 480, 162);
+    ctx.fillText(`${minionsPct}%`, 685, 162);
+
+    ctx.fillStyle = grey;
+    ctx.font = small;
+
+    ctx.fillText("Mounts", 480 + mountsMeasure.width + 5, 162);
+    ctx.fillText("Minions", 685 + minionsMeasure.width + 5, 162);
+
+    ctx.drawImage(this.imgMount, 620, 140, 32, 32);
+    ctx.drawImage(this.imgMinion, 834, 140, 19, 32);
+
+    ctx.fillStyle = white;
+    
+
     // Why are there so many fucking jobs in this game?
     // Crafting
-    ctx.font = small;
     ctx.textAlign = "center";
 
     var cJobsRowX = jobsRowStart;
