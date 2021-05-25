@@ -172,14 +172,14 @@ class CardCreator {
     const mountsMeasure = ctx.measureText(`${mountsPct}%`);
     const minionsMeasure = ctx.measureText(`${minionsPct}%`);
 
-    ctx.fillText(`${mountsPct}%`, 480, 162);
-    ctx.fillText(`${minionsPct}%`, 685, 162);
+    ctx.fillText(`${mountsPct}%`, 480, 163);
+    ctx.fillText(`${minionsPct}%`, 685, 163);
 
     ctx.fillStyle = grey;
     ctx.font = small;
 
-    ctx.fillText("Mounts", 480 + mountsMeasure.width + 5, 162);
-    ctx.fillText("Minions", 685 + minionsMeasure.width + 5, 162);
+    ctx.fillText("Mounts", 480 + mountsMeasure.width + 5, 163);
+    ctx.fillText("Minions", 685 + minionsMeasure.width + 5, 163);
 
     ctx.drawImage(this.imgMount, 620, 140, 32, 32);
     ctx.drawImage(this.imgMinion, 834, 140, 19, 32);
