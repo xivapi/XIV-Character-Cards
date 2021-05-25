@@ -1,0 +1,2 @@
+# XIV Character Cards
+
