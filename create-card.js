@@ -102,7 +102,7 @@ class CardCreator {
     ctx.fillRect(464, 135, 195, 40);
     ctx.fillRect(669, 135, 195, 40);
 
-    ctx.fillRect(464, 183, 400, 205);
+    ctx.fillRect(464, 183, 400, 210);
     ctx.fillRect(464, 405, 400, 175);
     ctx.stroke();
     ctx.textAlign = "center";
