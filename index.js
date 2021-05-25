@@ -14,7 +14,8 @@ app.get('/characters/id/:charaId', async (req, res) => {
 
         res.writeHead(200, {
             'Content-Type': 'image/png',
-            'Content-Length': png.length
+            'Content-Length': png.length,
+            'Cache-Control': 'public, max-age=14400'
         });
         res.end(png, 'binary');
     }catch(error){
@@ -37,7 +38,8 @@ app.get('/characters/name/:world/:charName', async (req, res) => {
 
         res.writeHead(200, {
             'Content-Type': 'image/png',
-            'Content-Length': png.length
+            'Content-Length': png.length,
+            'Cache-Control': 'public, max-age=14400'
         });
         res.end(png, 'binary');
     }catch(error){
