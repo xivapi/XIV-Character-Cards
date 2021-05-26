@@ -8,6 +8,8 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "cache-manager-fs": "^1.0.8",
+    "cache-manager-fs-binary": "^1.0.4",
     "canvas": "^2.6.1",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
