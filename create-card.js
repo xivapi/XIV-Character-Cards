@@ -34,22 +34,23 @@ const rectHeightRow3 = 210; // Info
 const rectHeightRow4 = 175; // Jobs
 
 const rectSpacing = 8;
+const rectHalfWidthSpacing = 10;
 
 const rectFullWidth = 400;
-const rectHalfWidth = (rectFullWidth / 2) - 5;
+const rectHalfWidth = (rectFullWidth / 2) - (rectHalfWidthSpacing / 2);
 
 const rectStartX = 464;
-const rectStartXHalf = rectStartX + rectHalfWidth + 10;
+const rectStartXHalf = rectStartX + rectHalfWidth + rectHalfWidthSpacing;
 
-const rectStartRow1 = 7;
-const rectStartRow2 = rectStartRow1 + rectHeightRow1 + rectSpacing;
-const rectStartRow3 = rectStartRow2 + rectHeightRow2 + rectSpacing;
-const rectStartRow4 = rectStartRow3 + rectHeightRow3 + rectSpacing;
+const rectStartRow1Y = 7;
+const rectStartRow2Y = rectStartRow1Y + rectHeightRow1 + rectSpacing;
+const rectStartRow3Y = rectStartRow2Y + rectHeightRow2 + rectSpacing;
+const rectStartRow4Y = rectStartRow3Y + rectHeightRow3 + rectSpacing;
 
 const jobsStartSpacing = 10;
 const jobsRowSpacing = 8;
 
-const jobsRowIcon1Y = rectStartRow4 + jobsStartSpacing;
+const jobsRowIcon1Y = rectStartRow4Y + jobsStartSpacing;
 const jobsRowText1Y = jobsRowIcon1Y + 45;
 
 const jobsRowIcon2Y = jobsRowText1Y + jobsRowSpacing;
@@ -58,9 +59,9 @@ const jobsRowText2Y = jobsRowIcon2Y + 45;
 const jobsRowIcon3Y = jobsRowText2Y + jobsRowSpacing;
 const jobsRowText3Y = jobsRowIcon3Y + 45;
 
-console.log("rectStartRow2: " + rectStartRow2);
-console.log("rectStartRow3: " + rectStartRow3);
-console.log("rectStartRow4: " + rectStartRow4);
+console.log("rectStartRow2: " + rectStartRow2Y);
+console.log("rectStartRow3: " + rectStartRow3Y);
+console.log("rectStartRow4: " + rectStartRow4Y);
 
 class CardCreator {
   constructor() {
@@ -189,13 +190,13 @@ class CardCreator {
     ctx.strokeStyle = white;
     ctx.fillStyle = black;
     ctx.beginPath();
-    ctx.fillRect(rectStartX, rectStartRow1, rectFullWidth, rectHeightRow1);
+    ctx.fillRect(rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
 
-    ctx.fillRect(rectStartX, rectStartRow2, rectHalfWidth, rectHeightRow2);
-    ctx.fillRect(rectStartXHalf, rectStartRow2, rectHalfWidth, rectHeightRow2);
+    ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
+    ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
 
-    ctx.fillRect(rectStartX, rectStartRow3, rectFullWidth, rectHeightRow3);
-    ctx.fillRect(rectStartX, rectStartRow4, rectFullWidth, rectHeightRow4);
+    ctx.fillRect(rectStartX, rectStartRow3Y, rectFullWidth, rectHeightRow3);
+    ctx.fillRect(rectStartX, rectStartRow4Y, rectFullWidth, rectHeightRow4);
     ctx.stroke();
 
     ctx.textAlign = "center";
