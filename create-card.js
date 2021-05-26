@@ -76,6 +76,13 @@ const fcCrestScale = 38;
 const fcCrestY = rectStartRow3Y + 162;
 const fcCrestX = 800;
 
+const infoTextStartSpacing = 22;
+const infoTextSmallStartY = rectStartRow3Y + infoTextStartSpacing;
+const infoTextBigStartY = infoTextSmallStartY + 25;
+const infoTextSpacing = 50;
+
+console.log("infoTextStartY: " + infoTextSmallStartY);
+
 class CardCreator {
   constructor() {
     this.isInit = false;
@@ -223,14 +230,15 @@ class CardCreator {
     // Race, Clan, Guardian, GC, FC Titles
     ctx.font = small;
     ctx.textAlign = "left";
-    ctx.fillText("Race & Clan", 480, 205);
-    ctx.fillText("Guardian", 480, 255);
+    ctx.fillText("Race & Clan", 480, infoTextSmallStartY);
+    ctx.fillText("Guardian", 480, infoTextSmallStartY + infoTextSpacing);
     if (data.Character.GrandCompany.Company != null) {
-      ctx.fillText("Grand Company", 480, 305);
+      ctx.fillText("Grand Company", 480, infoTextSmallStartY + infoTextSpacing * 2);
     }
     if (data.Character.FreeCompanyName != null) {
-      ctx.fillText("Free Company", 480, 355);
+      ctx.fillText("Free Company", 480, infoTextSmallStartY + infoTextSpacing * 3);
     }
+
     ctx.fillStyle = white;
     ctx.font = large;
     ctx.textAlign = "center";
@@ -243,14 +251,14 @@ class CardCreator {
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
     ctx.textAlign = "left";
-    ctx.fillText(`${data.Character.Race.Name}, ${data.Character.Tribe.Name}`, 480, 230);
+    ctx.fillText(`${data.Character.Race.Name}, ${data.Character.Tribe.Name}`, 480, infoTextBigStartY);
 
-    ctx.fillText(data.Character.GuardianDeity.Name, 480, 280);
+    ctx.fillText(data.Character.GuardianDeity.Name, 480, infoTextBigStartY + infoTextSpacing);
     var deityIcon = await loadImage('https://xivapi.com/' + data.Character.GuardianDeity.Icon);
     ctx.drawImage(deityIcon, deityIconX, deityIconY, 28, 28);
 
     if (data.Character.GrandCompany.Company != null) {
-      ctx.fillText(data.Character.GrandCompany.Company.Name, 480, 330);
+      ctx.fillText(data.Character.GrandCompany.Company.Name, 480, infoTextBigStartY + infoTextSpacing * 2);
 
       var gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
       ctx.drawImage(gcRankIcon, gcRankIconX, gcRankIconY, 40, 40);
@@ -259,7 +267,7 @@ class CardCreator {
       var crestImage = await this.createCrest(data.FreeCompany.Crest);
       ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
 
-      ctx.fillText(data.Character.FreeCompanyName, 480, 380);
+      ctx.fillText(data.Character.FreeCompanyName, 480, infoTextBigStartY + infoTextSpacing * 3);
     }
 
     // Minion & Mount percentages
