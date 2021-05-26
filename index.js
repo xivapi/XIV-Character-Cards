@@ -24,6 +24,54 @@ var diskCache = cacheManager.caching({
     }
 });
 
+async function getCharIdByName(world, name) {
+    var response = await fetch(`https://xivapi.com/character/search?name=${name}&server=${world}`);
+    var data = await response.json();
+
+    if (data.Results[0] === undefined)
+        return undefined;
+
+    return data.Results[0].ID;
+}
+
+app.get('/prepare/id/:charaId', async (req, res) => {
+    var cacheKey = `img:${req.params.charaId}`;
+    var ttl = 60 * 60 * 4; // 4 hours
+
+    diskCache.wrap(cacheKey,
+        // called if the cache misses in order to generate the value to cache
+        function (cb) {
+            creator.ensureInit().then(() => creator.createCard(req.params.charaId).then(image => cb(null, {
+                binary: {
+                    image: image,
+                }
+            })).catch((reason) => cb(reason, null)));
+        },
+        // Options, see node-cache-manager for more examples
+        { ttl: ttl },
+        function (err, result) {
+            if (err !== null) {
+                console.error(err);
+                res.status(500).send({status: "error", reason: err});
+                return;
+            }
+
+            res.status(200).send({status: "ok", url: `/characters/id/${req.params.charaId}.png`});
+        }
+    );
+})
+
+app.get('/prepare/name/:world/:charName', async (req, res) => {
+    var id = await getCharIdByName(req.params.world, req.params.charName);
+
+    if (id === undefined) {
+        res.status(404).send("Character not found.");
+        return;
+    }
+
+    res.redirect(`/prepare/id/${id}`);
+})
+
 app.get('/characters/id/:charaId.png', async (req, res) => {
     var cacheKey = `img:${req.params.charaId}`;
     var ttl = 60 * 60 * 4; // 4 hours
@@ -42,7 +90,7 @@ app.get('/characters/id/:charaId.png', async (req, res) => {
         function (err, result) {
             if (err !== null) {
                 console.error(err);
-                res.status(500).send("Lodestone did not respond in time.");
+                res.status(500).send({status: "error", reason: err});
                 return;
             }
 
@@ -79,15 +127,14 @@ app.get('/characters/id/:charaId', async (req, res) => {
 })
 
 app.get('/characters/name/:world/:charName.png', async (req, res) => {
-    var response = await fetch(`https://xivapi.com/character/search?name=${req.params.charName}&server=${req.params.world}`);
-    var data = await response.json();
+    var id = await getCharIdByName(req.params.world, req.params.charName);
 
-    if (data.Results[0] === undefined) {
+    if (id === undefined) {
         res.status(404).send("Character not found.");
         return;
     }
 
-    res.redirect(`/characters/id/${data.Results[0].ID}.png`);
+    res.redirect(`/characters/id/${id}.png`);
 })
 
 app.get('/characters/name/:world/:charName', async (req, res) => {
