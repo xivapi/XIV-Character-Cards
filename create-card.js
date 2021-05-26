@@ -54,6 +54,11 @@ const jobsRowText2Y = jobsRowIcon2Y + 45;
 const jobsRowIcon3Y = jobsRowText2Y + jobsRowSpacing;
 const jobsRowText3Y = jobsRowIcon3Y + 45;
 
+const textTitleY = rectStartRow1Y + 34;
+const textServerY = rectStartRow1Y + 104;
+const textNameNoTitleY = rectStartRow1Y + 59;
+const textNameTitleY = rectStartRow1Y + 79;
+
 console.log("rectStartRow2: " + rectStartRow2Y);
 console.log("rectStartRow3: " + rectStartRow3Y);
 console.log("rectStartRow4: " + rectStartRow4Y);
@@ -207,9 +212,9 @@ class CardCreator {
     ctx.textAlign = "center";
     ctx.font = med;
     ctx.fillStyle = primary;
-    ctx.fillText(data.Character.Title.Name, 665, 45);
+    ctx.fillText(data.Character.Title.Name, 665, textTitleY);
     ctx.font = small;
-    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, 115);
+    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, textServerY);
 
 
     // Race, Clan, Guardian, GC, FC Titles
@@ -228,9 +233,9 @@ class CardCreator {
     ctx.textAlign = "center";
     // Chara Name
     if (data.Character.Title.Name == null || data.Character.Title.Name == "") {
-      ctx.fillText(data.Character.Name, 665, 70);
+      ctx.fillText(data.Character.Name, 665, textNameNoTitleY);
     } else {
-      ctx.fillText(data.Character.Name, 665, 90);
+      ctx.fillText(data.Character.Name, 665, textNameTitleY);
     }
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
