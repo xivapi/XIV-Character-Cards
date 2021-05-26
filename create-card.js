@@ -152,19 +152,19 @@ class CardCreator {
   }
 
   async createCrest(crestAry) {
-    const canvas = createCanvas(fcCrestScale, fcCrestScale);
+    const canvas = createCanvas(128, 128);
     const ctx = canvas.getContext("2d");
 
     var crestLayer2 = await loadImage(crestAry[0]);
-    ctx.drawImage(crestLayer2, 0, 0, fcCrestScale, fcCrestScale);
+    ctx.drawImage(crestLayer2, 0, 0, 128, 128);
 
     var crestLayer1 = await loadImage(crestAry[1]);
-    ctx.drawImage(crestLayer1, 0, 0, fcCrestScale, fcCrestScale);
+    ctx.drawImage(crestLayer1, 0, 0, 128, 128);
 
     var crestLayer0 = await loadImage(crestAry[2]);
-    ctx.drawImage(crestLayer0, 0, 0, fcCrestScale, fcCrestScale);
+    ctx.drawImage(crestLayer0, 0, 0, 128, 128);
 
-    var imgd = ctx.getImageData(0, 0, fcCrestScale, fcCrestScale),
+    var imgd = ctx.getImageData(0, 0, 128, 128),
       pix = imgd.data,
       newColor = { r: 0, g: 0, b: 0, a: 0 };
 
