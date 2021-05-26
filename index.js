@@ -41,11 +41,11 @@ app.get('/prepare/id/:charaId', async (req, res) => {
     diskCache.wrap(cacheKey,
         // called if the cache misses in order to generate the value to cache
         function (cb) {
-            creator.ensureInit().then(() => creator.createCard(req.params.charaId).then(image => cb(null, {
+            creator.ensureInit().then(() => creator.createCard(req.params.charaId), (reason) => cb('Init failed: ' + reason, null)).then(image => cb(null, {
                 binary: {
                     image: image,
                 }
-            })).catch((reason) => cb(reason, null)));
+            })).catch((reason) => cb('createCard failed: ' + reason, null));
         },
         // Options, see node-cache-manager for more examples
         { ttl: ttl },
@@ -79,11 +79,11 @@ app.get('/characters/id/:charaId.png', async (req, res) => {
     diskCache.wrap(cacheKey,
         // called if the cache misses in order to generate the value to cache
         function (cb) {
-            creator.ensureInit().then(() => creator.createCard(req.params.charaId).then(image => cb(null, {
+            creator.ensureInit().then(() => creator.createCard(req.params.charaId), (reason) => cb('Init failed: ' + reason, null)).then(image => cb(null, {
                 binary: {
                     image: image,
                 }
-            })).catch((reason) => cb(reason, null)));
+            })).catch((reason) => cb('createCard failed: ' + reason, null));
         },
         // Options, see node-cache-manager for more examples
         { ttl: ttl },
