@@ -2,6 +2,8 @@
 
 API to create fancy cards for FFXIV characters based on their Lodestone data, hosted at https://ffxiv-character-cards.herokuapp.com.
 
+![Demo image](https://ffxiv-character-cards.herokuapp.com/characters/id/9575452.png)
+
 ## Endpoints
 
 ### Getting images
