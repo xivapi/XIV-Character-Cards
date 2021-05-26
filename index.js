@@ -42,6 +42,7 @@ app.get('/characters/id/:charaId.png', async (req, res) => {
         { ttl: ttl },
         function (err, result) {
             if (err !== null) {
+                console.error(err);
                 res.status(500).send("Lodestone did not respond in time.");
                 return;
             }
