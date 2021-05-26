@@ -14,7 +14,7 @@ const med = '30px "Source Sans Pro"';
 const smed = '25px "Source Sans Pro"';
 const large = '45px "Source Sans Pro SemiBold"';
 
-const jobsRowStart = 495;
+const jobsRowTextStartX = 495;
 const jobsRowTextSize = 30;
 const jobsRowTextSpacer = jobsRowTextSize * 2;
 
@@ -27,6 +27,40 @@ const gcRankIconRow = 799;
 const fcCrestScale = 38;
 const fcCrestCol = 345;
 const fcCrestRow = 800;
+
+const rectHeightRow1 = 120; // Title, Name, World
+const rectHeightRow2 = 40; // Mounts, Minions
+const rectHeightRow3 = 210; // Info
+const rectHeightRow4 = 175; // Jobs
+
+const rectSpacing = 8;
+
+const rectFullWidth = 400;
+const rectHalfWidth = (rectFullWidth / 2) - 5;
+
+const rectStartX = 464;
+const rectStartXHalf = rectStartX + rectHalfWidth + 10;
+
+const rectStartRow1 = 7;
+const rectStartRow2 = rectStartRow1 + rectHeightRow1 + rectSpacing;
+const rectStartRow3 = rectStartRow2 + rectHeightRow2 + rectSpacing;
+const rectStartRow4 = rectStartRow3 + rectHeightRow3 + rectSpacing;
+
+const jobsStartSpacing = 10;
+const jobsRowSpacing = 8;
+
+const jobsRowIcon1Y = rectStartRow4 + jobsStartSpacing;
+const jobsRowText1Y = jobsRowIcon1Y + 45;
+
+const jobsRowIcon2Y = jobsRowText1Y + jobsRowSpacing;
+const jobsRowText2Y = jobsRowIcon2Y + 45;
+
+const jobsRowIcon3Y = jobsRowText2Y + jobsRowSpacing;
+const jobsRowText3Y = jobsRowIcon3Y + 45;
+
+console.log("rectStartRow2: " + rectStartRow2);
+console.log("rectStartRow3: " + rectStartRow3);
+console.log("rectStartRow4: " + rectStartRow4);
 
 class CardCreator {
   constructor() {
@@ -155,14 +189,15 @@ class CardCreator {
     ctx.strokeStyle = white;
     ctx.fillStyle = black;
     ctx.beginPath();
-    ctx.fillRect(464, 7, 400, 120);
+    ctx.fillRect(rectStartX, rectStartRow1, rectFullWidth, rectHeightRow1);
 
-    ctx.fillRect(464, 135, 195, 40);
-    ctx.fillRect(669, 135, 195, 40);
+    ctx.fillRect(rectStartX, rectStartRow2, rectHalfWidth, rectHeightRow2);
+    ctx.fillRect(rectStartXHalf, rectStartRow2, rectHalfWidth, rectHeightRow2);
 
-    ctx.fillRect(464, 183, 400, 210);
-    ctx.fillRect(464, 405, 400, 175);
+    ctx.fillRect(rectStartX, rectStartRow3, rectFullWidth, rectHeightRow3);
+    ctx.fillRect(rectStartX, rectStartRow4, rectFullWidth, rectHeightRow4);
     ctx.stroke();
+
     ctx.textAlign = "center";
     ctx.font = med;
     ctx.fillStyle = primary;
@@ -246,133 +281,133 @@ class CardCreator {
     // Crafting
     ctx.textAlign = "center";
 
-    var cJobsRowX = jobsRowStart;
-    ctx.drawImage(this.imgAlchemist, 480, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[24].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    var cJobsRowTextX = jobsRowTextStartX;
+    ctx.drawImage(this.imgAlchemist, 480, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[24].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgArmorer, 510, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[20].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgArmorer, 510, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[20].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgBlacksmith, 540, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[19].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgBlacksmith, 540, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[19].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgCarpenter, 570, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[18].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgCarpenter, 570, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[18].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgCulinarian, 600, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[25].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgCulinarian, 600, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[25].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgGoldsmith, 630, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[21].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgGoldsmith, 630, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[21].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgLeatherworker, 660, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[22].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgLeatherworker, 660, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[22].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgWeaver, 690, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[23].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSpacer;
+    ctx.drawImage(this.imgWeaver, 690, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[23].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSpacer;
 
     // Gathering
-    ctx.drawImage(this.imgBotanist, 750, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[27].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgBotanist, 750, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[27].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgFisher, 780, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[28].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgFisher, 780, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[28].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgMiner, 810, 520, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[26].Level, cJobsRowX, 565);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgMiner, 810, jobsRowIcon3Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[26].Level, cJobsRowTextX, jobsRowText3Y);
+    cJobsRowTextX += jobsRowTextSize;
 
     // Tanks
-    cJobsRowX = jobsRowStart;
+    cJobsRowTextX = jobsRowTextStartX;
 
-    ctx.drawImage(this.imgPaladin, 480, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[0].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgPaladin, 480, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[0].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgWarrior, 510, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[1].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgWarrior, 510, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[1].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgDarkKnight, 540, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[2].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgDarkKnight, 540, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[2].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgGunbreaker, 570, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[3].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSpacer;
+    ctx.drawImage(this.imgGunbreaker, 570, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[3].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSpacer;
 
     // Healers
-    ctx.drawImage(this.imgWhitemage, 630, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[8].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgWhitemage, 630, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[8].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgScholar, 660, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[9].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgScholar, 660, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[9].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgAstrologian, 690, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[10].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSpacer;
+    ctx.drawImage(this.imgAstrologian, 690, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[10].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSpacer;
 
     // DPS
     // Ranged
-    ctx.drawImage(this.imgBard, 750, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[11].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgBard, 750, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[11].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgMachinist, 780, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[12].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgMachinist, 780, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[12].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgDancer, 810, 415, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[13].Level, cJobsRowX, 460);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgDancer, 810, jobsRowIcon1Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[13].Level, cJobsRowTextX, jobsRowText1Y);
+    cJobsRowTextX += jobsRowTextSize;
 
     // Melee
-    cJobsRowX = jobsRowStart;
+    cJobsRowTextX = jobsRowTextStartX;
 
-    ctx.drawImage(this.imgDragoon, 480, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[5].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgDragoon, 480, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[5].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgMonk, 510, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[4].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgMonk, 510, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[4].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgNinja, 540, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[6].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgNinja, 540, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[6].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgSamurai, 570, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[7].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSpacer;
+    ctx.drawImage(this.imgSamurai, 570, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[7].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSpacer;
 
     // Caster
-    ctx.drawImage(this.imgBlackmage, 630, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[14].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgBlackmage, 630, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[14].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgSummoner, 660, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[15].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgSummoner, 660, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[15].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgRedmage, 690, 465, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[16].Level, cJobsRowX, 515);
-    cJobsRowX += jobsRowTextSize;
+    ctx.drawImage(this.imgRedmage, 690, jobsRowIcon2Y, 30, 30);
+    ctx.fillText(data.Character.ClassJobs[16].Level, cJobsRowTextX, jobsRowText2Y);
+    cJobsRowTextX += jobsRowTextSize;
 
     // Limited
-    ctx.drawImage(this.imgBluemage, 780, 465, 33, 33);
-    ctx.fillText(data.Character.ClassJobs[17].Level, 796, 515);
+    ctx.drawImage(this.imgBluemage, 780, jobsRowIcon2Y, 33, 33);
+    ctx.fillText(data.Character.ClassJobs[17].Level, 796, jobsRowText2Y);
 
     return canvas.toBuffer();
   }
