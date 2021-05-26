@@ -155,7 +155,7 @@ class CardCreator {
     var crestLayer0 = await loadImage(crestAry[2]);
     ctx.drawImage(crestLayer0, 0, 0, fcCrestScale, fcCrestScale);
 
-    var imgd = ctx.getImageData(0, 0, 135, 135),
+    var imgd = ctx.getImageData(0, 0, fcCrestScale, fcCrestScale),
       pix = imgd.data,
       newColor = { r: 0, g: 0, b: 0, a: 0 };
 
