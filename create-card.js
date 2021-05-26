@@ -197,32 +197,18 @@ class CardCreator {
     ctx.fillText(`${data.Character.Race.Name}, ${data.Character.Tribe.Name}`, 480, 230);
 
     ctx.fillText(data.Character.GuardianDeity.Name, 480, 280);
-    var measure = ctx.measureText(data.Character.GuardianDeity.Name);
     var deityIcon = await loadImage('https://xivapi.com/' + data.Character.GuardianDeity.Icon);
     ctx.drawImage(deityIcon, deityIconRow, deityIconCol, 28, 28);
 
     if (data.Character.GrandCompany.Company != null) {
       ctx.fillText(data.Character.GrandCompany.Company.Name, 480, 330);
 
-      var measure = ctx.measureText(data.Character.GrandCompany.Company.Name);
       var gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
       ctx.drawImage(gcRankIcon, gcRankIconRow, gcRankIconCol, 40, 40);
     }
     if (data.Character.FreeCompanyName != null) {
-      var measure = ctx.measureText(data.Character.FreeCompanyName);
-
       var crestImage = await this.createCrest(data.FreeCompany.Crest);
       ctx.drawImage(crestImage, fcCrestRow, fcCrestCol, fcCrestScale, fcCrestScale);
-
-      /* var crestLayer2 = await loadImage(data.FreeCompany.Crest[0]);
-      ctx.drawImage(crestLayer2, fcCrestRow, fcCrestCol, 38, 38);
-
-      var crestLayer1 = await loadImage(data.FreeCompany.Crest[1]);
-      ctx.drawImage(crestLayer1, fcCrestRow, fcCrestCol, 38, 38);
-
-      var crestLayer0 = await loadImage(data.FreeCompany.Crest[2]);
-      ctx.drawImage(crestLayer0, fcCrestRow, fcCrestCol, 38, 38);
-      */
 
       ctx.fillText(data.Character.FreeCompanyName, 480, 380);
     }
