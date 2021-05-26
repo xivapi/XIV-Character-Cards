@@ -59,6 +59,9 @@ const textServerY = rectStartRow1Y + 104;
 const textNameNoTitleY = rectStartRow1Y + 59;
 const textNameTitleY = rectStartRow1Y + 79;
 
+const textMountMinionY = rectStartRow2Y + 28;
+const iconMountMinionY = rectStartRow2Y + 5;
+
 console.log("rectStartRow2: " + rectStartRow2Y);
 console.log("rectStartRow3: " + rectStartRow3Y);
 console.log("rectStartRow4: " + rectStartRow4Y);
@@ -273,17 +276,17 @@ class CardCreator {
     const mountsMeasure = ctx.measureText(`${mountsPct}%`);
     const minionsMeasure = ctx.measureText(`${minionsPct}%`);
 
-    ctx.fillText(`${mountsPct}%`, 480, 163);
-    ctx.fillText(`${minionsPct}%`, 685, 163);
+    ctx.fillText(`${mountsPct}%`, 480, textMountMinionY);
+    ctx.fillText(`${minionsPct}%`, 685, textMountMinionY);
 
     ctx.fillStyle = grey;
     ctx.font = small;
 
-    ctx.fillText("Mounts", 480 + mountsMeasure.width + 5, 163);
-    ctx.fillText("Minions", 685 + minionsMeasure.width + 5, 163);
+    ctx.fillText("Mounts", 480 + mountsMeasure.width + 5, textMountMinionY);
+    ctx.fillText("Minions", 685 + minionsMeasure.width + 5, textMountMinionY);
 
-    ctx.drawImage(this.imgMount, 620, 140, 32, 32);
-    ctx.drawImage(this.imgMinion, 834, 140, 19, 32);
+    ctx.drawImage(this.imgMount, 620, iconMountMinionY, 32, 32);
+    ctx.drawImage(this.imgMinion, 834, iconMountMinionY, 19, 32);
 
     ctx.fillStyle = white;
 
