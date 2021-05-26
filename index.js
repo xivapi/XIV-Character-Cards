@@ -6,7 +6,6 @@ const port = process.env.PORT || 5000;
 const { CardCreator } = require('./create-card');
 
 const creator = new CardCreator();
-creator.init();
 
 // node cachemanager
 var cacheManager = require('cache-manager');
@@ -28,15 +27,16 @@ var diskCache = cacheManager.caching({
 app.get('/characters/id/:charaId.png', async (req, res) => {
     var cacheKey = `img:${req.params.charaId}`;
     var ttl = 60 * 60 * 4; // 4 hours
+    ttl = 1;
 
     diskCache.wrap(cacheKey,
         // called if the cache misses in order to generate the value to cache
         function (cb) {
-            creator.createCard(req.params.charaId).then(image => cb(null, {
+            creator.ensureInit().then(() => creator.createCard(req.params.charaId).then(image => cb(null, {
                 binary: {
                     image: image,
                 }
-            })).catch((reason) => cb(reason, null));
+            })).catch((reason) => cb(reason, null)));
         },
         // Options, see node-cache-manager for more examples
         { ttl: ttl },

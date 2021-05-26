@@ -18,9 +18,28 @@ const jobsRowStart = 495;
 const jobsRowTextSize = 30;
 const jobsRowTextSpacer = jobsRowTextSize * 2;
 
+const deityIconCol = 252;
+const deityIconRow = 805;
+
+const gcRankIconCol = 293;
+const gcRankIconRow = 799;
+
 const fcCrestCol = 345;
+const fcCrestRow = 800;
 
 class CardCreator {
+  constructor(){
+    this.isInit = false;
+  }
+
+  async ensureInit() {
+    if (this.isInit) {
+      return;
+    }
+
+    await this.init();
+  }
+
   async init() {
     this.bgImage = await loadImage("./chara_n.png");
 
@@ -79,6 +98,10 @@ class CardCreator {
     this.countMount = data.Pagination.ResultsTotal;
 
     console.log(`Refreshed counts: ${this.countMinion} - ${this.countMount}`);
+  }
+
+  async createCrest(crestAry) {
+    
   }
 
   async createCard(charaId) {
@@ -141,26 +164,26 @@ class CardCreator {
     ctx.fillText(data.Character.GuardianDeity.Name, 480, 280);
     var measure = ctx.measureText(data.Character.GuardianDeity.Name);
     var deityIcon = await loadImage('https://xivapi.com/' + data.Character.GuardianDeity.Icon);
-    ctx.drawImage(deityIcon, 480 + measure.width + 20, 252, 28, 28);
+    ctx.drawImage(deityIcon, deityIconRow, deityIconCol, 28, 28);
 
     if (data.Character.GrandCompany.Company != null) {
       ctx.fillText(data.Character.GrandCompany.Company.Name, 480, 330);
 
       var measure = ctx.measureText(data.Character.GrandCompany.Company.Name);
       var gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
-      ctx.drawImage(gcRankIcon, 480 + measure.width + 20, 300, 40, 40);
+      ctx.drawImage(gcRankIcon, gcRankIconRow, gcRankIconCol, 40, 40);
     }
     if (data.Character.FreeCompanyName != null) {
       var measure = ctx.measureText(data.Character.FreeCompanyName);
 
       var crestLayer2 = await loadImage(data.FreeCompany.Crest[0]);
-      ctx.drawImage(crestLayer2, 480 + measure.width + 20, fcCrestCol, 38, 38);
+      ctx.drawImage(crestLayer2, fcCrestRow, fcCrestCol, 38, 38);
 
       var crestLayer1 = await loadImage(data.FreeCompany.Crest[1]);
-      ctx.drawImage(crestLayer1, 480 + measure.width + 20, fcCrestCol, 38, 38);
+      ctx.drawImage(crestLayer1, fcCrestRow, fcCrestCol, 38, 38);
 
       var crestLayer0 = await loadImage(data.FreeCompany.Crest[2]);
-      ctx.drawImage(crestLayer0, 480 + measure.width + 20, fcCrestCol, 38, 38);
+      ctx.drawImage(crestLayer0, fcCrestRow, fcCrestCol, 38, 38);
 
       ctx.fillText(data.Character.FreeCompanyName, 480, 380);
     }
