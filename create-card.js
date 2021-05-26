@@ -39,6 +39,7 @@ class CardCreator {
     }
 
     await this.init();
+    this.isInit = true;
   }
 
   async init() {
