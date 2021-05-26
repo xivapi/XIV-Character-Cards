@@ -24,11 +24,12 @@ const deityIconRow = 805;
 const gcRankIconCol = 293;
 const gcRankIconRow = 799;
 
+const fcCrestScale = 38;
 const fcCrestCol = 345;
 const fcCrestRow = 800;
 
 class CardCreator {
-  constructor(){
+  constructor() {
     this.isInit = false;
   }
 
@@ -101,7 +102,40 @@ class CardCreator {
   }
 
   async createCrest(crestAry) {
-    
+    const canvas = createCanvas(fcCrestScale, fcCrestScale);
+    const ctx = canvas.getContext("2d");
+
+    var crestLayer2 = await loadImage(crestAry[0]);
+    ctx.drawImage(crestLayer2, 0, 0, fcCrestScale, fcCrestScale);
+
+    var crestLayer1 = await loadImage(crestAry[1]);
+    ctx.drawImage(crestLayer1, 0, 0, fcCrestScale, fcCrestScale);
+
+    var crestLayer0 = await loadImage(crestAry[2]);
+    ctx.drawImage(crestLayer0, 0, 0, fcCrestScale, fcCrestScale);
+
+    var imgd = ctx.getImageData(0, 0, 135, 135),
+      pix = imgd.data,
+      newColor = { r: 0, g: 0, b: 0, a: 0 };
+
+    for (var i = 0, n = pix.length; i < n; i += 4) {
+      var r = pix[i],
+        g = pix[i + 1],
+        b = pix[i + 2];
+
+      // If its white then change it
+      if (r == 64 && g == 64 && b == 64) {
+        // Change the white to whatever.
+        pix[i] = newColor.r;
+        pix[i + 1] = newColor.g;
+        pix[i + 2] = newColor.b;
+        pix[i + 3] = newColor.a;
+      }
+    }
+
+    ctx.putImageData(imgd, 0, 0);
+
+    return canvas;
   }
 
   async createCard(charaId) {
@@ -176,7 +210,10 @@ class CardCreator {
     if (data.Character.FreeCompanyName != null) {
       var measure = ctx.measureText(data.Character.FreeCompanyName);
 
-      var crestLayer2 = await loadImage(data.FreeCompany.Crest[0]);
+      var crestImage = await this.createCrest(data.FreeCompany.Crest);
+      ctx.drawImage(crestImage, fcCrestRow, fcCrestCol, fcCrestScale, fcCrestScale);
+
+      /* var crestLayer2 = await loadImage(data.FreeCompany.Crest[0]);
       ctx.drawImage(crestLayer2, fcCrestRow, fcCrestCol, 38, 38);
 
       var crestLayer1 = await loadImage(data.FreeCompany.Crest[1]);
@@ -184,6 +221,7 @@ class CardCreator {
 
       var crestLayer0 = await loadImage(data.FreeCompany.Crest[2]);
       ctx.drawImage(crestLayer0, fcCrestRow, fcCrestCol, 38, 38);
+      */
 
       ctx.fillText(data.Character.FreeCompanyName, 480, 380);
     }
@@ -208,7 +246,7 @@ class CardCreator {
     ctx.drawImage(this.imgMinion, 834, 140, 19, 32);
 
     ctx.fillStyle = white;
-    
+
 
     // Why are there so many fucking jobs in this game?
     // Crafting
