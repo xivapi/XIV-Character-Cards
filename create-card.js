@@ -214,8 +214,15 @@ class CardCreator {
     }
 
     // Minion & Mount percentages
-    const mountsPct = Math.ceil((data.Mounts.length / this.countMount) * 100);
-    const minionsPct = Math.ceil((data.Minions.length / this.countMinion) * 100);
+    var mountsPct = '??';
+    if (data.Mounts !== null) {
+      mountsPct = Math.ceil((data.Mounts.length / this.countMount) * 100);
+    }
+    
+    var minionsPct = '??';
+    if (data.Minions !== null) {
+      minionsPct = Math.ceil((data.Minions.length / this.countMinion) * 100);
+    }
 
     const mountsMeasure = ctx.measureText(`${mountsPct}%`);
     const minionsMeasure = ctx.measureText(`${minionsPct}%`);
