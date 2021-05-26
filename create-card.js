@@ -54,11 +54,6 @@ const jobsRowText2Y = jobsRowIcon2Y + 45;
 const jobsRowIcon3Y = jobsRowText2Y + jobsRowSpacing;
 const jobsRowText3Y = jobsRowIcon3Y + 45;
 
-const textTitleY = rectStartRow1Y + 34;
-const textServerY = rectStartRow1Y + 104;
-const textNameNoTitleY = rectStartRow1Y + 59;
-const textNameTitleY = rectStartRow1Y + 79;
-
 const textMountMinionY = rectStartRow2Y + 28;
 const iconMountMinionY = rectStartRow2Y + 5;
 
@@ -76,6 +71,16 @@ const infoTextStartSpacing = 22;
 const infoTextSmallStartY = rectStartRow3Y + infoTextStartSpacing;
 const infoTextBigStartY = infoTextSmallStartY + 25;
 const infoTextSpacing = 50;
+
+const portraitWidth = 441;
+const footRectHeight = 120;
+const footRectStartY = 600 - footRectHeight;
+const footTextCenterX = portraitWidth / 2;
+
+const textTitleY = footRectStartY + 34;
+const textServerY = footRectStartY + 104;
+const textNameNoTitleY = footRectStartY + 59;
+const textNameTitleY = footRectStartY + 79;
 
 class CardCreator {
   constructor() {
@@ -199,12 +204,16 @@ class CardCreator {
 
     ctx.drawImage(this.bgImage, 0, 0, 900, 600);
 
-    ctx.drawImage(portrait, 0, 0, 441, 600);
+    ctx.drawImage(portrait, 0, 0, portraitWidth, 600);
 
     ctx.strokeStyle = white;
     ctx.fillStyle = black;
     ctx.beginPath();
-    ctx.fillRect(rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
+
+    //ctx.fillRect(0, 890 - 120, 100, 120/*120*/);
+
+    ctx.fillRect(0, footRectStartY, portraitWidth, footRectHeight);
+    //ctx.fillRect(rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
@@ -216,9 +225,9 @@ class CardCreator {
     ctx.textAlign = "center";
     ctx.font = med;
     ctx.fillStyle = primary;
-    ctx.fillText(data.Character.Title.Name, 665, textTitleY);
+    ctx.fillText(data.Character.Title.Name, footTextCenterX, textTitleY);
     ctx.font = small;
-    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, textServerY);
+    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, footTextCenterX, textServerY);
 
 
     // Race, Clan, Guardian, GC, FC Titles
@@ -238,9 +247,9 @@ class CardCreator {
     ctx.textAlign = "center";
     // Chara Name
     if (data.Character.Title.Name == null || data.Character.Title.Name == "") {
-      ctx.fillText(data.Character.Name, 665, textNameNoTitleY);
+      ctx.fillText(data.Character.Name, footTextCenterX, textNameNoTitleY);
     } else {
-      ctx.fillText(data.Character.Name, 665, textNameTitleY);
+      ctx.fillText(data.Character.Name, footTextCenterX, textNameTitleY);
     }
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
