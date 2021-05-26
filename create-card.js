@@ -37,7 +37,7 @@ const rectHalfWidth = (rectFullWidth / 2) - (rectHalfWidthSpacing / 2);
 const rectStartX = 464;
 const rectStartXHalf = rectStartX + rectHalfWidth + rectHalfWidthSpacing;
 
-const rectStartRow1Y = 7;
+const rectStartRow1Y = 15;
 const rectStartRow2Y = rectStartRow1Y + rectHeightRow1 + rectSpacing;
 const rectStartRow3Y = rectStartRow2Y + rectHeightRow2 + rectSpacing;
 const rectStartRow4Y = rectStartRow3Y + rectHeightRow3 + rectSpacing;
