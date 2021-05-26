@@ -62,10 +62,6 @@ const textNameTitleY = rectStartRow1Y + 79;
 const textMountMinionY = rectStartRow2Y + 28;
 const iconMountMinionY = rectStartRow2Y + 5;
 
-console.log("rectStartRow2: " + rectStartRow2Y);
-console.log("rectStartRow3: " + rectStartRow3Y);
-console.log("rectStartRow4: " + rectStartRow4Y);
-
 const deityIconY = rectStartRow3Y + 69;
 const deityIconX = 805;
 
@@ -80,8 +76,6 @@ const infoTextStartSpacing = 22;
 const infoTextSmallStartY = rectStartRow3Y + infoTextStartSpacing;
 const infoTextBigStartY = infoTextSmallStartY + 25;
 const infoTextSpacing = 50;
-
-console.log("infoTextStartY: " + infoTextSmallStartY);
 
 class CardCreator {
   constructor() {
