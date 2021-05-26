@@ -88,15 +88,15 @@ class CardCreator {
   }
 
   async countMountsMinions() {
-    var response = await fetch(`https://xivapi.com/Companion`);
+    var response = await fetch(`https://ffxivcollect.com/api/minions/`);
     var data = await response.json();
 
-    this.countMinion = data.Pagination.ResultsTotal;
+    this.countMinion = data.count;
 
-    var response = await fetch(`https://xivapi.com/Mount`);
+    var response = await fetch(`https://ffxivcollect.com/api/mounts/`);
     var data = await response.json();
 
-    this.countMount = data.Pagination.ResultsTotal;
+    this.countMount = data.count;
 
     console.log(`Refreshed counts: ${this.countMinion} - ${this.countMount}`);
   }
