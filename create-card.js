@@ -98,7 +98,7 @@ class CardCreator {
   }
 
   async init() {
-    this.bgImage = await loadImage(absolute("./chara_n.png"));
+    this.bgImage = await loadImage(absolute("./chara.png"));
 
     this.imgMinion = await loadImage(absolute("./minion.png"));
     this.imgMount = await loadImage(absolute("./mount.png"));
@@ -203,7 +203,7 @@ class CardCreator {
 
     var portrait = await loadImage(data.Character.Portrait);
 
-    ctx.drawImage(this.bgImage, 441, 0, 900, 600);
+    ctx.drawImage(this.bgImage, 0, 0, 900, 600);
 
     ctx.drawImage(portrait, 0, 0, 441, 600);
 
