@@ -1,9 +1,14 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
+const path = require("path");
 const { createCanvas, loadImage, registerFont } = require("canvas");
 
-registerFont('SourceSansPro-Regular.ttf', { family: 'Source Sans Pro', style: 'Regular' });
-registerFont('SourceSansPro-SemiBold.ttf', { family: 'Source Sans Pro', style: 'SemiBold' });
+function absolute(relativePath) {
+    return path.join(__dirname, relativePath);
+}
+
+registerFont(absolute('SourceSansPro-Regular.ttf'), { family: 'Source Sans Pro', style: 'Regular' });
+registerFont(absolute('SourceSansPro-SemiBold.ttf'), { family: 'Source Sans Pro', style: 'SemiBold' });
 
 const primary = "rgba(178, 214, 249, 1)";
 const white = "rgba(255, 255, 255,1)";
@@ -78,47 +83,47 @@ class CardCreator {
   }
 
   async init() {
-    this.bgImage = await loadImage("./chara_n.png");
+    this.bgImage = await loadImage(absolute("./chara_n.png"));
 
-    this.imgMinion = await loadImage("./minion.png");
-    this.imgMount = await loadImage("./mount.png");
+    this.imgMinion = await loadImage(absolute("./minion.png"));
+    this.imgMount = await loadImage(absolute("./mount.png"));
 
-    this.imgAlchemist = await loadImage("./cj/1/alchemist.png");
-    this.imgArmorer = await loadImage("./cj/1/armorer.png");
-    this.imgBlacksmith = await loadImage("./cj/1/blacksmith.png");
-    this.imgCarpenter = await loadImage("./cj/1/carpenter.png");
-    this.imgCulinarian = await loadImage("./cj/1/culinarian.png");
-    this.imgGoldsmith = await loadImage("./cj/1/goldsmith.png");
-    this.imgLeatherworker = await loadImage("./cj/1/leatherworker.png");
-    this.imgWeaver = await loadImage("./cj/1/weaver.png");
+    this.imgAlchemist = await loadImage(absolute("./cj/1/alchemist.png"));
+    this.imgArmorer = await loadImage(absolute("./cj/1/armorer.png"));
+    this.imgBlacksmith = await loadImage(absolute("./cj/1/blacksmith.png"));
+    this.imgCarpenter = await loadImage(absolute("./cj/1/carpenter.png"));
+    this.imgCulinarian = await loadImage(absolute("./cj/1/culinarian.png"));
+    this.imgGoldsmith = await loadImage(absolute("./cj/1/goldsmith.png"));
+    this.imgLeatherworker = await loadImage(absolute("./cj/1/leatherworker.png"));
+    this.imgWeaver = await loadImage(absolute("./cj/1/weaver.png"));
 
-    this.imgBotanist = await loadImage("./cj/1/botanist.png");
-    this.imgFisher = await loadImage("./cj/1/fisher.png");
-    this.imgMiner = await loadImage("./cj/1/miner.png");
+    this.imgBotanist = await loadImage(absolute("./cj/1/botanist.png"));
+    this.imgFisher = await loadImage(absolute("./cj/1/fisher.png"));
+    this.imgMiner = await loadImage(absolute("./cj/1/miner.png"));
 
-    this.imgPaladin = await loadImage("./cj/1/paladin.png");
-    this.imgWarrior = await loadImage("./cj/1/warrior.png");
-    this.imgDarkKnight = await loadImage("./cj/1/darkknight.png");
-    this.imgGunbreaker = await loadImage("./cj/1/gunbreaker.png");
+    this.imgPaladin = await loadImage(absolute("./cj/1/paladin.png"));
+    this.imgWarrior = await loadImage(absolute("./cj/1/warrior.png"));
+    this.imgDarkKnight = await loadImage(absolute("./cj/1/darkknight.png"));
+    this.imgGunbreaker = await loadImage(absolute("./cj/1/gunbreaker.png"));
 
-    this.imgWhitemage = await loadImage("./cj/1/whitemage.png");
-    this.imgScholar = await loadImage("./cj/1/scholar.png");
-    this.imgAstrologian = await loadImage("./cj/1/astrologian.png");
+    this.imgWhitemage = await loadImage(absolute("./cj/1/whitemage.png"));
+    this.imgScholar = await loadImage(absolute("./cj/1/scholar.png"));
+    this.imgAstrologian = await loadImage(absolute("./cj/1/astrologian.png"));
 
-    this.imgBard = await loadImage("./cj/1/bard.png");
-    this.imgMachinist = await loadImage("./cj/1/machinist.png");
-    this.imgDancer = await loadImage("./cj/1/dancer.png");
+    this.imgBard = await loadImage(absolute("./cj/1/bard.png"));
+    this.imgMachinist = await loadImage(absolute("./cj/1/machinist.png"));
+    this.imgDancer = await loadImage(absolute("./cj/1/dancer.png"));
 
-    this.imgDragoon = await loadImage("./cj/1/dragoon.png");
-    this.imgMonk = await loadImage("./cj/1/monk.png");
-    this.imgNinja = await loadImage("./cj/1/ninja.png");
-    this.imgSamurai = await loadImage("./cj/1/samurai.png");
+    this.imgDragoon = await loadImage(absolute("./cj/1/dragoon.png"));
+    this.imgMonk = await loadImage(absolute("./cj/1/monk.png"));
+    this.imgNinja = await loadImage(absolute("./cj/1/ninja.png"));
+    this.imgSamurai = await loadImage(absolute("./cj/1/samurai.png"));
 
-    this.imgBlackmage = await loadImage("./cj/1/blackmage.png");
-    this.imgSummoner = await loadImage("./cj/1/summoner.png");
-    this.imgRedmage = await loadImage("./cj/1/redmage.png");
+    this.imgBlackmage = await loadImage(absolute("./cj/1/blackmage.png"));
+    this.imgSummoner = await loadImage(absolute("./cj/1/summoner.png"));
+    this.imgRedmage = await loadImage(absolute("./cj/1/redmage.png"));
 
-    this.imgBluemage = await loadImage('./cj/1/bluemage.png');
+    this.imgBluemage = await loadImage(absolute('./cj/1/bluemage.png'));
 
     await this.countMountsMinions();
   }
