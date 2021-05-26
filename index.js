@@ -27,7 +27,6 @@ var diskCache = cacheManager.caching({
 app.get('/characters/id/:charaId.png', async (req, res) => {
     var cacheKey = `img:${req.params.charaId}`;
     var ttl = 60 * 60 * 4; // 4 hours
-    ttl = 1;
 
     diskCache.wrap(cacheKey,
         // called if the cache misses in order to generate the value to cache
