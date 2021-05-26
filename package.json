@@ -1,7 +1,7 @@
 {
   "name": "xiv-character-cards",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "create-card.js",
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
