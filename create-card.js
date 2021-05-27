@@ -251,7 +251,7 @@ class CardCreator {
     ctx.beginPath();
     ctx.fillRect(rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
 
-    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.Class.ID], rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
+    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
