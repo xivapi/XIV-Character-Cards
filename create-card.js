@@ -196,7 +196,7 @@ class CardCreator {
 
     var portrait = await loadImage(data.Character.Portrait);
 
-    ctx.drawImage(this.bgImage, 0, 0, 900, 600);
+    ctx.drawImage(this.bgImage, -10, 0, 900, 600);
 
     ctx.drawImage(portrait, 0, 0, 441, 600);
 
