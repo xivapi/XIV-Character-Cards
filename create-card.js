@@ -136,6 +136,11 @@ class CardCreator {
 
     this.imgBluemage = await loadImage(absolute('./cj/1/bluemage.png'));
 
+    this.imgJobBg = {};
+    for (var i = 1; i <= 38; i++) {
+      this.imgJobBg[i] = await loadImage(absolute(`./cj/bg/${i}.png`));
+    }
+
     await this.countMountsMinions();
   }
 
@@ -245,6 +250,8 @@ class CardCreator {
     ctx.fillStyle = black;
     ctx.beginPath();
     ctx.fillRect(rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
+
+    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.Class.ID], rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
