@@ -14,6 +14,7 @@ const primary = "rgba(178, 214, 249, 1)";
 const white = "rgba(255, 255, 255,1)";
 const grey = "#868686";
 const black = "rgba(0,0,0,0.5)";
+const copyright = '"11px "Source Sans Pro"';
 const small = '"18px "Source Sans Pro"';
 const med = '30px "Source Sans Pro"';
 const smed = '25px "Source Sans Pro"';
@@ -92,6 +93,9 @@ class CardCreator {
   }
 
   async init() {
+    var d = new Date();
+    this.copyrightYear = d.getFullYear();
+
     this.bgImage = await loadImage(absolute("./chara.png"));
 
     this.imgMinion = await loadImage(absolute("./minion.png"));
@@ -238,7 +242,7 @@ class CardCreator {
     var data = await response.json();
 
     const canvas = createCanvas(890, 600);
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");  
 
     var portrait = await loadImage(data.Character.Portrait);
 
@@ -492,6 +496,12 @@ class CardCreator {
     // Limited
     ctx.drawImage(this.imgBluemage, 780, jobsRowIcon2Y, 33, 33);
     ctx.fillText(data.Character.ClassJobs[17].Level, 796, jobsRowText2Y);
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = black;
+    ctx.font = copyright;
+
+    ctx.fillText(`© 2010 - ${this.copyrightYear} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 600 - 5);
 
     return canvas.toBuffer();
   }
