@@ -25,8 +25,9 @@ const jobsRowTextSpacer = jobsRowTextSize * 2;
 
 const rectHeightRow1 = 120; // Title, Name, World
 const rectHeightRow2 = 40; // Mounts, Minions
-const rectHeightRow3 = 210; // Info
-const rectHeightRow4 = 175; // Jobs
+const rectHeightRow3 = 215; // Info
+const rectHeightRow4 = 120; // Jobs
+const rectHeightRow5 = 175; // Jobs
 
 const rectSpacing = 8;
 const rectHalfWidthSpacing = 10;
@@ -37,15 +38,16 @@ const rectHalfWidth = (rectFullWidth / 2) - (rectHalfWidthSpacing / 2);
 const rectStartX = 464;
 const rectStartXHalf = rectStartX + rectHalfWidth + rectHalfWidthSpacing;
 
-const rectStartRow1Y = 15;
+const rectStartRow1Y = 0;
 const rectStartRow2Y = rectStartRow1Y + rectHeightRow1 + rectSpacing;
 const rectStartRow3Y = rectStartRow2Y + rectHeightRow2 + rectSpacing;
 const rectStartRow4Y = rectStartRow3Y + rectHeightRow3 + rectSpacing;
+const rectStartRow5Y = rectStartRow4Y + rectHeightRow4 + rectSpacing;
 
 const jobsStartSpacing = 10;
 const jobsRowSpacing = 8;
 
-const jobsRowIcon1Y = rectStartRow4Y + jobsStartSpacing;
+const jobsRowIcon1Y = rectStartRow5Y + jobsStartSpacing;
 const jobsRowText1Y = jobsRowIcon1Y + 45;
 
 const jobsRowIcon2Y = jobsRowText1Y + jobsRowSpacing;
@@ -240,27 +242,31 @@ class CardCreator {
     var response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
     var data = await response.json();
 
-    const canvas = createCanvas(890, 600);
+    const canvas = createCanvas(890, 720);
     const ctx = canvas.getContext("2d");  
 
     var portrait = await loadImage(data.Character.Portrait);
 
-    ctx.drawImage(this.bgImage, -10, 0, 900, 600);
+    ctx.drawImage(this.bgImage, -10, 120, 900, 600);
 
-    ctx.drawImage(portrait, 0, 0, 441, 600);
+    ctx.drawImage(portrait, 0, 120, 441, 600);
 
     ctx.strokeStyle = white;
-    ctx.fillStyle = black;
+    //This can be removed once background is extended.
+    ctx.fillStyle = 'rgba(28, 28, 28, 1)';
     ctx.beginPath();
-    ctx.fillRect(rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
+    // Name, Title, Server Rect
+    ctx.fillRect(0, 0, 900, 120);
+    ctx.fillStyle = black;
 
-    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], rectStartX, rectStartRow1Y, rectFullWidth, rectHeightRow1);
+    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], rectStartX, 2, rectFullWidth, rectHeightRow1);
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
 
-    ctx.fillRect(rectStartX, rectStartRow3Y, rectFullWidth, rectHeightRow3);
-    ctx.fillRect(rectStartX, rectStartRow4Y, rectFullWidth, rectHeightRow4);
+    ctx.fillRect(rectStartX, rectStartRow3Y, rectFullWidth, rectHeightRow3); //info
+    ctx.fillRect(rectStartX, rectStartRow4Y, rectFullWidth, rectHeightRow4); // bozja
+    ctx.fillRect(rectStartX, rectStartRow5Y, rectFullWidth, rectHeightRow5);
     ctx.stroke();
 
     ctx.textAlign = "center";
@@ -268,11 +274,10 @@ class CardCreator {
     ctx.fillStyle = primary;
     
     if (data.Character.Title.Name !== undefined)
-      ctx.fillText(data.Character.Title.Name, 665, textTitleY);
+      ctx.fillText(data.Character.Title.Name, 450, 30);
 
     ctx.font = small;
-    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, textServerY);
-
+    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 450, 100);
 
     // Race, Clan, Guardian, GC, FC Titles
     ctx.font = small;
@@ -285,14 +290,20 @@ class CardCreator {
     if (data.Character.FreeCompanyName != null) {
       ctx.fillText("Free Company", 480, infoTextSmallStartY + infoTextSpacing * 3);
     }
+    if (data.Character.ClassJobsBozjan.Level != null) {
+      ctx.fillText("Resistance Rank & Mettle", 480, 425);
+    }
+    if (data.Character.ClassJobsElemental.Level != null) {
+      ctx.fillText("Elemental Level", 480, 475);
+    }
 
     ctx.fillStyle = grey;
     ctx.font = smed;
 
     var ilvl = this.getItemLevel(data.Character.GearSet.Gear);
-    ctx.drawImage(this.imgShadow, 441 - 143, -15, 170, 90);
-    ctx.drawImage(this.imgIlvl, 441 - 92, 12, 24, 27);
-    ctx.fillText(ilvl, 441 - 65, 35);
+    ctx.drawImage(this.imgShadow, 441 - 143, 110, 170, 90);
+    ctx.drawImage(this.imgIlvl, 441 - 92, 132, 24, 27);
+    ctx.fillText(ilvl, 441 - 65, 155);
 
     ctx.fillStyle = white;
     ctx.font = large;
@@ -300,9 +311,9 @@ class CardCreator {
     ctx.textAlign = "center";
     // Chara Name
     if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == "") {
-      ctx.fillText(data.Character.Name, 665, textNameNoTitleY);
+      ctx.fillText(data.Character.Name, 450, 70);
     } else {
-      ctx.fillText(data.Character.Name, 665, textNameTitleY);
+      ctx.fillText(data.Character.Name, 450, 70);
     }
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
@@ -337,6 +348,14 @@ class CardCreator {
 
     ctx.font = smed;
     ctx.fillStyle = white;
+
+    if (data.Character.ClassJobsBozjan.Level != null) {
+      ctx.fillText(`Rank ${data.Character.ClassJobsBozjan.Level} with ${data.Character.ClassJobsBozjan.Mettle} Mettle`, 480, 450);
+    }
+
+    if (data.Character.ClassJobsElemental.Level != null) {
+      ctx.fillText(`${data.Character.ClassJobsElemental.Level}`, 480, 500);
+    }
 
     // Minion & Mount percentages
     var mountsPct = '??';
@@ -503,7 +522,7 @@ class CardCreator {
     ctx.fillStyle = black;
     ctx.font = copyright;
 
-    ctx.fillText(`© 2010 - ${this.copyrightYear} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 600 - 5);
+    ctx.fillText(`© 2010 - ${this.copyrightYear} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5);
 
     return canvas.toBuffer();
   }
