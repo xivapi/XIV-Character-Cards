@@ -266,7 +266,10 @@ class CardCreator {
     ctx.textAlign = "center";
     ctx.font = med;
     ctx.fillStyle = primary;
-    ctx.fillText(data.Character.Title.Name, 665, textTitleY);
+    
+    if (data.Character.Title.Name !== undefined)
+      ctx.fillText(data.Character.Title.Name, 665, textTitleY);
+
     ctx.font = small;
     ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 665, textServerY);
 
@@ -296,7 +299,7 @@ class CardCreator {
 
     ctx.textAlign = "center";
     // Chara Name
-    if (data.Character.Title.Name == null || data.Character.Title.Name == "") {
+    if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == "") {
       ctx.fillText(data.Character.Name, 665, textNameNoTitleY);
     } else {
       ctx.fillText(data.Character.Name, 665, textNameTitleY);
