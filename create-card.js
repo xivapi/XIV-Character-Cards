@@ -96,6 +96,8 @@ class CardCreator {
 
     this.imgMinion = await loadImage(absolute("./minion.png"));
     this.imgMount = await loadImage(absolute("./mount.png"));
+    this.imgIlvl = await loadImage(absolute("./ilvl_n.png"));
+    this.imgShadow = await loadImage(absolute("./shadow.png"));
 
     this.imgAlchemist = await loadImage(absolute("./cj/1/alchemist.png"));
     this.imgArmorer = await loadImage(absolute("./cj/1/armorer.png"));
@@ -188,6 +190,31 @@ class CardCreator {
     return canvas;
   }
 
+  getItemLevel(gearset) {
+    var ilvl = 0;
+    var cnt = 0;
+
+    for (var key in gearset) {
+      if (key == 'SoulCrystal')
+        continue;
+
+      var piece = gearset[key];
+      ilvl += piece.Item.LevelItem;
+      cnt++;
+    }
+
+    if (cnt == 0)
+      return 0;
+
+    return this.pad(Math.ceil(ilvl / cnt), 4);
+  }
+
+  pad(num, size) {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+  }
+
   async createCard(charaId) {
     var response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
     var data = await response.json();
@@ -233,8 +260,17 @@ class CardCreator {
       ctx.fillText("Free Company", 480, infoTextSmallStartY + infoTextSpacing * 3);
     }
 
+    ctx.fillStyle = grey;
+    ctx.font = smed;
+
+    var ilvl = this.getItemLevel(data.Character.GearSet.Gear);
+    ctx.drawImage(this.imgShadow, 441 - 143, -15, 170, 90);
+    ctx.drawImage(this.imgIlvl, 441 - 92, 12, 24, 27);
+    ctx.fillText(ilvl, 441 - 65, 35);
+
     ctx.fillStyle = white;
     ctx.font = large;
+
     ctx.textAlign = "center";
     // Chara Name
     if (data.Character.Title.Name == null || data.Character.Title.Name == "") {
