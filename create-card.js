@@ -157,14 +157,13 @@ class CardCreator {
     const canvas = createCanvas(128, 128);
     const ctx = canvas.getContext("2d");
 
-    var crestLayer2 = await loadImage(crestAry[0]);
-    ctx.drawImage(crestLayer2, 0, 0, 128, 128);
+    if (crestAry.length == 0)
+      return null;
 
-    var crestLayer1 = await loadImage(crestAry[1]);
-    ctx.drawImage(crestLayer1, 0, 0, 128, 128);
-
-    var crestLayer0 = await loadImage(crestAry[2]);
-    ctx.drawImage(crestLayer0, 0, 0, 128, 128);
+    for (var i = 0; i < crestAry.length; i++) {
+      var crestLayer = await loadImage(crestAry[i]);
+      ctx.drawImage(crestLayer, 0, 0, 128, 128);
+    }
 
     var imgd = ctx.getImageData(0, 0, 128, 128),
       pix = imgd.data,
@@ -310,7 +309,9 @@ class CardCreator {
 
     if (data.Character.FreeCompanyName != null) {
       var crestImage = await this.createCrest(data.FreeCompany.Crest);
-      ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
+
+      if (crestImage !== null)
+        ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
 
       ctx.fillText(data.Character.FreeCompanyName, 480, infoTextBigStartY + infoTextSpacing * 3);
     }
