@@ -313,8 +313,17 @@ class CardCreator {
       if (crestImage !== null)
         ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
 
+
+      const fcMeasure = ctx.measureText(data.Character.FreeCompanyName);
       ctx.fillText(data.Character.FreeCompanyName, 480, infoTextBigStartY + infoTextSpacing * 3);
+
+      ctx.fillStyle = grey;
+      ctx.font = small;
+      ctx.fillText(`«${data.FreeCompany.Tag}»`, 480 + fcMeasure.width + 10, infoTextBigStartY + infoTextSpacing * 3);
     }
+
+    ctx.font = smed;
+    ctx.fillStyle = white;
 
     // Minion & Mount percentages
     var mountsPct = '??';
