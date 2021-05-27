@@ -32,4 +32,45 @@ The API will reply with its status, and in case of success, the URL to the final
 
 ## Using in your application
 
-You can use the ``create-card.js`` file in any NodeJS project. It will return a PNG-buffer for you to use in your bot or application.<br>Check ``index.js`` for usage examples.
+```
+yarn add xiv-character-cards
+# or
+npm i xiv-character-cards
+```
+
+You will receive a PNG-buffer for you to use in your bot or application.<br>Check ``index.js`` for other usage examples.
+
+### Example
+
+```js
+const { CardCreator } = require("xiv-character-cards");
+const fs = require("fs");
+
+const card = new CardCreator();
+const lodestoneid = "13821878";
+
+function example(cb) {
+  card.ensureInit()
+    .then(
+      () => card.createCard(lodestoneid),
+      (reason) => cb("Init failed: " + reason, null)
+    )
+    .then((image) =>
+      cb(null, {
+        binary: {
+          image: image,
+        },
+      })
+    )
+    .catch((reason) => cb("createCard failed: " + reason, null));
+}
+
+example((err, response) => {
+  const buffer = response.binary.image;
+  fs.writeFileSync(`./${lodestoneid}.png`, response.binary.image, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
+```
