@@ -193,20 +193,34 @@ class CardCreator {
   getItemLevel(gearset) {
     var ilvl = 0;
     var cnt = 0;
+    var mainHandLvl = 0;
+    var hasOffHand = false;
 
     for (var key in gearset) {
+      var piece = gearset[key];
+
       if (key == 'SoulCrystal')
         continue;
 
-      var piece = gearset[key];
+      if (key == 'MainHand')
+        mainHandLvl = piece.Item.LevelItem;
+
+      if (key == 'OffHand')
+        hasOffHand = true;
+
       ilvl += piece.Item.LevelItem;
+      cnt++;
+    }
+
+    if (!hasOffHand) {
+      ilvl += mainHandLvl;
       cnt++;
     }
 
     if (cnt == 0)
       return 0;
 
-    return this.pad(Math.ceil(ilvl / cnt), 4);
+    return this.pad(Math.floor(ilvl / cnt), 4);
   }
 
   pad(num, size) {
@@ -293,6 +307,7 @@ class CardCreator {
       var gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
       ctx.drawImage(gcRankIcon, gcRankIconX, gcRankIconY, 40, 40);
     }
+
     if (data.Character.FreeCompanyName != null) {
       var crestImage = await this.createCrest(data.FreeCompany.Crest);
       ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
