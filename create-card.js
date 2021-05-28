@@ -88,7 +88,7 @@ class CardCreator {
 
   /**
    * Ensures that the instance is ready to generate character cards.
-   * This function should be called before using character card
+   * This function must be resolved before using character card
    * generation methods.
    * @returns {Promise} A promise representing the initialization state of this generator.
    */
