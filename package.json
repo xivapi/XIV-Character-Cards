@@ -12,8 +12,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "docs:generate": "jsdoc create-card.js -d docs -R readme.md",
-    "docs:deploy": "npm run docs:generate && node gh-pages.js",
-    "prepublish": "npm run docs:deploy"
+    "docs:deploy": "npm run docs:generate && node gh-pages.js"
   },
   "dependencies": {
     "cache-manager-fs": "^1.0.8",
