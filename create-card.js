@@ -288,12 +288,13 @@ class CardCreator {
     if (data.Character.FreeCompanyName != null) {
       ctx.fillText("Free Company", 480, infoTextSmallStartY + infoTextSpacing * 3);
     }
-    if (data.Character.ClassJobsBozjan.Level != null) {
-      ctx.fillText("Resistance Rank & Mettle", 480, 425);
-    }
     if (data.Character.ClassJobsElemental.Level != null) {
-      ctx.fillText("Elemental Level", 480, 475);
+      ctx.fillText("Elemental Level", 480, 425);
     }
+    if (data.Character.ClassJobsBozjan.Level != null) {
+      ctx.fillText("Resistance Rank", 480, 475);
+    }
+
 
     ctx.fillStyle = grey;
     ctx.font = smed;
@@ -347,12 +348,12 @@ class CardCreator {
     ctx.font = smed;
     ctx.fillStyle = white;
 
-    if (data.Character.ClassJobsBozjan.Level != null) {
-      ctx.fillText(`Rank ${data.Character.ClassJobsBozjan.Level}`, 480, 450);
+    if (data.Character.ClassJobsElemental.Level != null) {
+      ctx.fillText(`${data.Character.ClassJobsElemental.Level}`, 480, 450);
     }
 
-    if (data.Character.ClassJobsElemental.Level != null) {
-      ctx.fillText(`${data.Character.ClassJobsElemental.Level}`, 480, 500);
+    if (data.Character.ClassJobsBozjan.Level != null) {
+      ctx.fillText(`Rank ${data.Character.ClassJobsBozjan.Level}`, 480, 500);
     }
 
     // Minion & Mount percentages
