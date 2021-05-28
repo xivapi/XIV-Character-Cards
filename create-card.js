@@ -97,7 +97,7 @@ class CardCreator {
     var d = new Date();
     this.copyrightYear = d.getFullYear();
 
-    this.bgImage = await loadImage(absolute("./chara.png"));
+    this.bgImage = await loadImage(absolute("./chara_top.png"));
 
     this.imgMinion = await loadImage(absolute("./minion.png"));
     this.imgMount = await loadImage(absolute("./mount.png"));
@@ -247,19 +247,17 @@ class CardCreator {
 
     var portrait = await loadImage(data.Character.Portrait);
 
-    ctx.drawImage(this.bgImage, -10, 120, 900, 600);
+    ctx.drawImage(this.bgImage, 0, 0, 890, 722);
 
     ctx.drawImage(portrait, 0, 120, 441, 600);
 
     ctx.strokeStyle = white;
-    //This can be removed once background is extended.
-    ctx.fillStyle = 'rgba(28, 28, 28, 1)';
+    ctx.fillStyle = black;
     ctx.beginPath();
     // Name, Title, Server Rect
-    ctx.fillRect(0, 0, 900, 120);
-    ctx.fillStyle = black;
+    ctx.fillRect(25, 10, 840, 100);
 
-    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], rectStartX, 2, rectFullWidth, rectHeightRow1);
+    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], 450, 5, rectFullWidth, 110);
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
@@ -274,7 +272,7 @@ class CardCreator {
     ctx.fillStyle = primary;
     
     if (data.Character.Title.Name !== undefined)
-      ctx.fillText(data.Character.Title.Name, 450, 30);
+      ctx.fillText(data.Character.Title.Name, 450, 40);
 
     ctx.font = small;
     ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 450, 100);
@@ -311,9 +309,9 @@ class CardCreator {
     ctx.textAlign = "center";
     // Chara Name
     if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == "") {
-      ctx.fillText(data.Character.Name, 450, 70);
+      ctx.fillText(data.Character.Name, 450, 75);
     } else {
-      ctx.fillText(data.Character.Name, 450, 70);
+      ctx.fillText(data.Character.Name, 450, 75);
     }
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
