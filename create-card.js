@@ -348,7 +348,7 @@ class CardCreator {
     ctx.fillStyle = white;
 
     if (data.Character.ClassJobsBozjan.Level != null) {
-      ctx.fillText(`Rank ${data.Character.ClassJobsBozjan.Level} with ${data.Character.ClassJobsBozjan.Mettle} Mettle`, 480, 450);
+      ctx.fillText(`Rank ${data.Character.ClassJobsBozjan.Level}`, 480, 450);
     }
 
     if (data.Character.ClassJobsElemental.Level != null) {
