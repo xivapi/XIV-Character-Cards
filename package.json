@@ -10,7 +10,10 @@
   ],
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "docs:generate": "jsdoc create-card.js -d docs -R readme.md",
+    "docs:deploy": "npm run docs:generate && node gh-pages.js",
+    "prepublish": "npm run docs:deploy"
   },
   "dependencies": {
     "cache-manager-fs": "^1.0.8",
@@ -19,5 +22,9 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.0",
+    "jsdoc": "^3.6.7"
   }
 }
