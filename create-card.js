@@ -249,6 +249,18 @@ class CardCreator {
   /**
    * Creates a character card for a character.
    * @param {number | string} charaId The Lodestone ID of the character to generate a card for.
+   * @example
+   * const fs = require("fs");
+   * 
+   * const card = new CardCreator();
+   * const lodestoneId = "13821878";
+   * 
+   * await card.ensureInit();
+   * const png = await card.createCard(lodestoneId);
+   * 
+   * fs.writeFile("./test.png", png, err => {
+   *   if (err) console.error(err);
+   * });
    * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
    */
   async createCard(charaId) {
