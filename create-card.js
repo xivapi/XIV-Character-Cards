@@ -78,10 +78,20 @@ const infoTextBigStartY = infoTextSmallStartY + 25;
 const infoTextSpacing = 50;
 
 class CardCreator {
+  /**
+   * Creates a new card creator.
+   * @constructor
+   */
   constructor() {
     this.isInit = false;
   }
 
+  /**
+   * Ensures that the instance is ready to generate character cards.
+   * This function should be called before using character card
+   * generation methods.
+   * @returns {Promise} A promise representing the initialization state of this generator.
+   */
   async ensureInit() {
     if (this.isInit) {
       return;
@@ -236,6 +246,11 @@ class CardCreator {
     return num;
   }
 
+  /**
+   * Creates a character card for a character.
+   * @param {number | string} charaId The Lodestone ID of the character to generate a card for.
+   * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
+   */
   async createCard(charaId) {
     var response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
     var data = await response.json();
