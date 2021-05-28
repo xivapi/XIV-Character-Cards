@@ -117,25 +117,34 @@ class CardCreator {
     this.imgFisher = await loadImage(absolute("./cj/1/fisher.png"));
     this.imgMiner = await loadImage(absolute("./cj/1/miner.png"));
 
+    this.imgGladiator = await loadImage(absolute("./cj/1/gladiator.png"));
     this.imgPaladin = await loadImage(absolute("./cj/1/paladin.png"));
+    this.imgMarauder = await loadImage(absolute("./cj/1/marauder.png"));
     this.imgWarrior = await loadImage(absolute("./cj/1/warrior.png"));
     this.imgDarkKnight = await loadImage(absolute("./cj/1/darkknight.png"));
     this.imgGunbreaker = await loadImage(absolute("./cj/1/gunbreaker.png"));
 
+    this.imgConjurer = await loadImage(absolute("./cj/1/conjurer.png"));
     this.imgWhitemage = await loadImage(absolute("./cj/1/whitemage.png"));
     this.imgScholar = await loadImage(absolute("./cj/1/scholar.png"));
     this.imgAstrologian = await loadImage(absolute("./cj/1/astrologian.png"));
 
+    this.imgArcher = await loadImage(absolute("./cj/1/archer.png"));
     this.imgBard = await loadImage(absolute("./cj/1/bard.png"));
     this.imgMachinist = await loadImage(absolute("./cj/1/machinist.png"));
     this.imgDancer = await loadImage(absolute("./cj/1/dancer.png"));
 
+    this.imgLancer = await loadImage(absolute("./cj/1/lancer.png"));
     this.imgDragoon = await loadImage(absolute("./cj/1/dragoon.png"));
+    this.imgPugilist = await loadImage(absolute("./cj/1/pugilist.png"));
     this.imgMonk = await loadImage(absolute("./cj/1/monk.png"));
+    this.imgRogue = await loadImage(absolute("./cj/1/rogue.png"));
     this.imgNinja = await loadImage(absolute("./cj/1/ninja.png"));
     this.imgSamurai = await loadImage(absolute("./cj/1/samurai.png"));
 
+    this.imgThaumaturge = await loadImage(absolute("./cj/1/thaumaturge.png"));
     this.imgBlackmage = await loadImage(absolute("./cj/1/blackmage.png"));
+    this.imgArcanist = await loadImage(absolute("./cj/1/arcanist.png"));
     this.imgSummoner = await loadImage(absolute("./cj/1/summoner.png"));
     this.imgRedmage = await loadImage(absolute("./cj/1/redmage.png"));
 
