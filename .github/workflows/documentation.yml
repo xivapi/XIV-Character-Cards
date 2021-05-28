@@ -19,5 +19,6 @@ jobs:
       run: |
         git config --global user.email "noreply@example.com"
         git config --global user.name Documentation
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
         npm install
         npm run docs:deploy
