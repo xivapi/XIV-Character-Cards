@@ -447,11 +447,19 @@ class CardCreator {
     // Tanks
     cJobsRowTextX = jobsRowTextStartX;
 
-    ctx.drawImage(this.imgPaladin, 480, jobsRowIcon1Y, 30, 30);
+    if (data.Character.ClassJobs[0].UnlockedState.ID == 19) {
+      ctx.drawImage(this.imgPaladin, 480, jobsRowIcon1Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgGladiator, 480, jobsRowIcon1Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[0].Level, cJobsRowTextX, jobsRowText1Y);
     cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgWarrior, 510, jobsRowIcon1Y, 30, 30);
+    if (data.Character.ClassJobs[1].UnlockedState.ID == 21) {
+      ctx.drawImage(this.imgWarrior, 510, jobsRowIcon1Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgMarauder, 510, jobsRowIcon1Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[1].Level, cJobsRowTextX, jobsRowText1Y);
     cJobsRowTextX += jobsRowTextSize;
 
@@ -464,12 +472,20 @@ class CardCreator {
     cJobsRowTextX += jobsRowTextSpacer;
 
     // Healers
-    ctx.drawImage(this.imgWhitemage, 630, jobsRowIcon1Y, 30, 30);
+    if (data.Character.ClassJobs[8].UnlockedState.ID == 24) {
+      ctx.drawImage(this.imgWhitemage, 630, jobsRowIcon1Y, 30, 30);  
+    } else {
+      ctx.drawImage(this.imgConjurer, 630, jobsRowIcon1Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[8].Level, cJobsRowTextX, jobsRowText1Y);
     cJobsRowTextX += jobsRowTextSize;
 
     ctx.drawImage(this.imgScholar, 660, jobsRowIcon1Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[9].Level, cJobsRowTextX, jobsRowText1Y);
+    if (data.Character.ClassJobs[9].Level >= 30) {
+      ctx.fillText(data.Character.ClassJobs[9].Level, cJobsRowTextX, jobsRowText1Y);
+    } else {
+      ctx.fillText("0", cJobsRowTextX, jobsRowText1Y);
+    }
     cJobsRowTextX += jobsRowTextSize;
 
     ctx.drawImage(this.imgAstrologian, 690, jobsRowIcon1Y, 30, 30);
@@ -478,7 +494,11 @@ class CardCreator {
 
     // DPS
     // Ranged
-    ctx.drawImage(this.imgBard, 750, jobsRowIcon1Y, 30, 30);
+    if (data.Character.ClassJobs[11].UnlockedState.ID == 23) {
+      ctx.drawImage(this.imgBard, 750, jobsRowIcon1Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgArcher, 750, jobsRowIcon1Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[11].Level, cJobsRowTextX, jobsRowText1Y);
     cJobsRowTextX += jobsRowTextSize;
 
@@ -493,15 +513,27 @@ class CardCreator {
     // Melee
     cJobsRowTextX = jobsRowTextStartX;
 
-    ctx.drawImage(this.imgDragoon, 480, jobsRowIcon2Y, 30, 30);
+    if (data.Character.ClassJobs[5].UnlockedState.ID == 22) {
+      ctx.drawImage(this.imgDragoon, 480, jobsRowIcon2Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgLancer, 480, jobsRowIcon2Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[5].Level, cJobsRowTextX, jobsRowText2Y);
     cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgMonk, 510, jobsRowIcon2Y, 30, 30);
+    if (data.Character.ClassJobs[4].UnlockedState.ID == 20) {
+      ctx.drawImage(this.imgMonk, 510, jobsRowIcon2Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgPugilist, 510, jobsRowIcon2Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[4].Level, cJobsRowTextX, jobsRowText2Y);
     cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgNinja, 540, jobsRowIcon2Y, 30, 30);
+    if (data.Character.ClassJobs[6].UnlockedState.ID == 30) {
+      ctx.drawImage(this.imgNinja, 540, jobsRowIcon2Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgRogue, 540, jobsRowIcon2Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[6].Level, cJobsRowTextX, jobsRowText2Y);
     cJobsRowTextX += jobsRowTextSize;
 
@@ -510,11 +542,19 @@ class CardCreator {
     cJobsRowTextX += jobsRowTextSpacer;
 
     // Caster
-    ctx.drawImage(this.imgBlackmage, 630, jobsRowIcon2Y, 30, 30);
+    if (data.Character.ClassJobs[14].UnlockedState.ID == 25) {
+      ctx.drawImage(this.imgBlackmage, 630, jobsRowIcon2Y, 30, 30); 
+    } else {
+      ctx.drawImage(this.imgThaumaturge, 630, jobsRowIcon2Y, 30, 30); 
+    }
     ctx.fillText(data.Character.ClassJobs[14].Level, cJobsRowTextX, jobsRowText2Y);
     cJobsRowTextX += jobsRowTextSize;
 
-    ctx.drawImage(this.imgSummoner, 660, jobsRowIcon2Y, 30, 30);
+    if (data.Character.ClassJobs[15].UnlockedState.ID == 27) {
+      ctx.drawImage(this.imgSummoner, 660, jobsRowIcon2Y, 30, 30);
+    } else {
+      ctx.drawImage(this.imgArcanist, 660, jobsRowIcon2Y, 30, 30);
+    }
     ctx.fillText(data.Character.ClassJobs[15].Level, cJobsRowTextX, jobsRowText2Y);
     cJobsRowTextX += jobsRowTextSize;
 
