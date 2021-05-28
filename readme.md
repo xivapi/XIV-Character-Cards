@@ -1,4 +1,6 @@
 # XIV Character Cards
+![npm Version](https://img.shields.io/npm/v/xiv-character-cards)
+[![Documentation](https://img.shields.io/badge/docs-JSDoc-orange)](https://xivapi.github.io/XIV-Character-Cards/)
 
 API to create fancy cards for FFXIV characters based on their Lodestone data, hosted at https://ffxiv-character-cards.herokuapp.com.
 
