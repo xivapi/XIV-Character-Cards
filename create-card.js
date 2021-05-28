@@ -266,7 +266,7 @@ class CardCreator {
     // Name, Title, Server Rect
     ctx.fillRect(25, 10, 840, 100);
 
-    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], 450, 5, rectFullWidth, 110);
+    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], 450, 4, rectFullWidth, 110);
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
@@ -315,9 +315,9 @@ class CardCreator {
     ctx.textAlign = "center";
     // Chara Name
     if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == "") {
-      ctx.fillText(data.Character.Name, 450, 75);
+      ctx.fillText(data.Character.Name, 450, 80);
     } else {
-      ctx.fillText(data.Character.Name, 450, 75);
+      ctx.fillText(data.Character.Name, 450, 80);
     }
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
