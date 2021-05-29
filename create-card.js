@@ -296,16 +296,16 @@ class CardCreator {
     const canvas = createCanvas(canvasSize.width, canvasSize.height);
     const ctx = canvas.getContext("2d");  
 
+    const portrait = await loadImage(data.Character.Portrait);
+
+    ctx.drawImage(this.bgImage, 0, 0, canvasSize.width, canvasSize.height + 2);
+
+    ctx.drawImage(portrait, 0, 120, 441, 600);
+
     if (customImage != null) {
       const bg = await loadImage(customImage);
 
-      ctx.drawImage(bg, 0, 0, 890, 722);
-    } else {
-      const portrait = await loadImage(data.Character.Portrait);
-
-      ctx.drawImage(this.bgImage, 0, 0, canvasSize.width, canvasSize.height + 2);
-
-      ctx.drawImage(portrait, 0, 120, 441, 600);
+      ctx.drawImage(bg, 0, 0, canvasSize.width, canvasSize.height);
     }
 
     ctx.strokeStyle = white;
