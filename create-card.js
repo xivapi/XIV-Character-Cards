@@ -271,7 +271,7 @@ class CardCreator {
    * Creates a character card for a character.
    * @param {number | string} charaId The Lodestone ID of the character to generate a card for.
    * @param {string | Buffer | null | undefined} customImage Optional parameter providing a custom
-   * image to be used instead of Lodestone assets. The image should be the same resolution as
+   * image to be drawn over the character card. The image should be the same resolution as
    * the default image. The default image size can be retrieved with {@link CardCreator#canvasSize}.
    * May be a URL, `data: `URI or a local file path or a Buffer instance.
    * @example
