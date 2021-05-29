@@ -303,7 +303,7 @@ class CardCreator {
     } else {
       const portrait = await loadImage(data.Character.Portrait);
 
-      ctx.drawImage(this.bgImage, 0, 0, 890, 722);
+      ctx.drawImage(this.bgImage, 0, 0, canvasSize.width, canvasSize.height + 2);
 
       ctx.drawImage(portrait, 0, 120, 441, 600);
     }
