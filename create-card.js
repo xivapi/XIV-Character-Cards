@@ -89,6 +89,16 @@ class CardCreator {
   }
 
   /**
+   * The canvas's dimensions.
+   */
+  get canvasSize() {
+    return {
+      width: 890,
+      height: 720,
+    };
+  }
+
+  /**
    * Ensures that the instance is ready to generate character cards.
    * This function must be resolved before using character card
    * generation methods.
@@ -260,6 +270,10 @@ class CardCreator {
   /**
    * Creates a character card for a character.
    * @param {number | string} charaId The Lodestone ID of the character to generate a card for.
+   * @param {string | Buffer | null | undefined} customImage Optional parameter providing a custom
+   * image to be used instead of Lodestone assets. The image should be the same resolution as
+   * the default image. The default image size can be retrieved with {@link CardCreator#canvasSize}.
+   * May be a URL, `data: `URI or a local file path or a Buffer instance.
    * @example
    * const fs = require("fs");
    * 
@@ -274,18 +288,25 @@ class CardCreator {
    * });
    * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
    */
-  async createCard(charaId) {
-    var response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
-    var data = await response.json();
+  async createCard(charaId, customImage) {
+    const response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
+    const data = await response.json();
 
-    const canvas = createCanvas(890, 720);
+    const canvasSize = this.canvasSize;
+    const canvas = createCanvas(canvasSize.width, canvasSize.height);
     const ctx = canvas.getContext("2d");  
 
-    var portrait = await loadImage(data.Character.Portrait);
+    if (customImage != null) {
+      const bg = await loadImage(customImage);
 
-    ctx.drawImage(this.bgImage, 0, 0, 890, 722);
+      ctx.drawImage(bg, 0, 0, 890, 722);
+    } else {
+      const portrait = await loadImage(data.Character.Portrait);
 
-    ctx.drawImage(portrait, 0, 120, 441, 600);
+      ctx.drawImage(this.bgImage, 0, 0, 890, 722);
+
+      ctx.drawImage(portrait, 0, 120, 441, 600);
+    }
 
     ctx.strokeStyle = white;
     ctx.fillStyle = black;
