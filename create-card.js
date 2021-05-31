@@ -293,7 +293,12 @@ class CardCreator {
     // Name, Title, Server Rect
     ctx.fillRect(25, 10, 840, 100);
 
-    ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], 450, 4, rectFullWidth, 110);
+    // BLU returns a null UnlockedState.ID so we can't use it to pick the job image.
+    if (data.Character.ActiveClassJob.UnlockedState.ID != null) {
+      ctx.drawImage(this.imgJobBg[data.Character.ActiveClassJob.UnlockedState.ID], 450, 4, rectFullWidth, 110);
+    } else {
+      ctx.drawImage(this.imgJobBg[36], 450, 4, rectFullWidth, 110);
+    }
 
     ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
     ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
