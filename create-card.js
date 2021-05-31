@@ -89,7 +89,14 @@ class CardCreator {
   }
 
   /**
+   * @typedef {Object} CardCreator~CanvasDimensions
+   * @property {number} width The width of the canvas.
+   * @property {number} height The height of the canvas.
+   */
+
+  /**
    * The canvas's dimensions.
+   * @type {CardCreator~CanvasDimensions}
    */
   get canvasSize() {
     return {
