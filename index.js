@@ -24,12 +24,14 @@ var diskCache = cacheManager.caching({
     }
 });
 
-async function getCharIdByName(world, name) {
-    var response = await fetch(`https://xivapi.com/character/search?name=${name}&server=${world}`);
-    var data = await response.json();
+async function getCharIdByName(world, name, retries = 1) {
+    if (retries === -1) return undefined;
+
+    const response = await fetch(`https://xivapi.com/character/search?name=${name}&server=${world}`);
+    const data = await response.json();
 
     if (data.Results[0] === undefined)
-        return undefined;
+        return getCharIdByName(world, name, --retries);
 
     return data.Results[0].ID;
 }

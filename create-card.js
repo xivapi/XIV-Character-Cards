@@ -290,7 +290,13 @@ class CardCreator {
    * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
    */
   async createCard(charaId, customImage) {
-    const response = await fetch(`https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`);
+    const characterInfoUrl = `https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`;
+    const response = await fetch(characterInfoUrl);
+    if (!response.ok) {
+      // Retry once if the request fails
+      response = await fetch(characterInfoUrl);
+    }
+
     const data = await response.json();
 
     const canvasSize = this.canvasSize;
