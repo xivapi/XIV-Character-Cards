@@ -2,6 +2,12 @@ const fetch = require("node-fetch");
 const path = require("path");
 const { createCanvas, loadImage, registerFont } = require("canvas");
 
+/**
+ * @typedef {Object} CardCreator~CanvasDimensions
+ * @property {number} width The width of the canvas.
+ * @property {number} height The height of the canvas.
+ */
+
 function absolute(relativePath) {
     return path.join(__dirname, relativePath);
 }
@@ -90,6 +96,7 @@ class CardCreator {
 
   /**
    * The canvas's dimensions.
+   * @type {CardCreator~CanvasDimensions}
    */
   get canvasSize() {
     return {
