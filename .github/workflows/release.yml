@@ -17,20 +17,6 @@ jobs:
         node-version: '14'
         registry-url: 'https://registry.npmjs.org'
 
-    - uses: actions/cache@v2
-      id: yarn-cache
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-modules-
-    - name: Install Dependencies
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
-      run: yarn install --frozen-lockfile
-
-    - name: Build
-      run: yarn build
-
     - name: Upload
       run: yarn publish --access public
       env:
