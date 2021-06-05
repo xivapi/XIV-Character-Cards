@@ -106,3 +106,7 @@ dist
 diskcache/
 
 docs/
+
+# My additions
+
+package-lock.json
