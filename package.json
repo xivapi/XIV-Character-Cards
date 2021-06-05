@@ -4,7 +4,7 @@
   "version": "1.2.0",
   "main": "create-card.js",
   "repository": "https://github.com/xivapi/XIV-Character-Cards.git",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "keywords": [
     "ffxiv",
     "xivapi"
