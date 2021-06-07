@@ -265,7 +265,10 @@ class CardCreator {
     if (cnt == 0)
       return 0;
 
-    return this.pad(Math.floor(ilvl / cnt), 4);
+    // ilvl division is always out of 13 items
+    // mainhand counts twice if there's no offhand
+    // job stones are ignored
+    return this.pad(Math.floor(ilvl / 13), 4);
   }
 
   pad(num, size) {
