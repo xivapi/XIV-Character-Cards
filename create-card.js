@@ -301,7 +301,7 @@ class CardCreator {
    */
   async createCard(charaId, customImage) {
     const characterInfoUrl = `https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`;
-    const response = await fetch(characterInfoUrl);
+    let response = await fetch(characterInfoUrl);
     if (!response.ok) {
       // Retry once if the request fails
       response = await fetch(characterInfoUrl);
