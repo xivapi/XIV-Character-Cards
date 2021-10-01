@@ -67,7 +67,7 @@ app.get('/prepare/name/:world/:charName', async (req, res) => {
     var id = await getCharIdByName(req.params.world, req.params.charName);
 
     if (id === undefined) {
-        res.status(404).send("Character not found.");
+        res.status(404).send({status: "error", reason: "Character not found."});
         return;
     }
 
@@ -132,7 +132,7 @@ app.get('/characters/name/:world/:charName.png', async (req, res) => {
     var id = await getCharIdByName(req.params.world, req.params.charName);
 
     if (id === undefined) {
-        res.status(404).send("Character not found.");
+        res.status(404).send({status: "error", reason: "Character not found."});
         return;
     }
 
