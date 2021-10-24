@@ -14,8 +14,8 @@ function absolute(relativePath) {
     return path.join(__dirname, relativePath);
 }
 
-registerFont(absolute('SourceSansPro-Regular.ttf'), { family: 'Source Sans Pro', style: 'Regular' });
-registerFont(absolute('SourceSansPro-SemiBold.ttf'), { family: 'Source Sans Pro', style: 'SemiBold' });
+registerFont(absolute('./resources/SourceSansPro-Regular.ttf'), { family: 'Source Sans Pro', style: 'Regular' });
+registerFont(absolute('./resources/SourceSansPro-SemiBold.ttf'), { family: 'Source Sans Pro', style: 'SemiBold' });
 
 const primary = "rgba(178, 214, 249, 1)";
 const white = "rgba(255, 255, 255,1)";
@@ -132,62 +132,62 @@ class CardCreator {
     var d = new Date();
     this.copyrightYear = d.getFullYear();
 
-    this.bgImage = await loadImage(absolute("./chara_top.png"));
+    this.bgImage = await loadImage(absolute("./resources/background.png"));
 
-    this.imgMinion = await loadImage(absolute("./minion.png"));
-    this.imgMount = await loadImage(absolute("./mount.png"));
-    this.imgIlvl = await loadImage(absolute("./ilvl_n.png"));
-    this.imgShadow = await loadImage(absolute("./shadow.png"));
+    this.imgMinion = await loadImage(absolute("./resources/minion.png"));
+    this.imgMount = await loadImage(absolute("./resources/mount.png"));
+    this.imgIlvl = await loadImage(absolute("./resources/ilvl-icon.png"));
+    this.imgShadow = await loadImage(absolute("./resources/shadow.png"));
 
-    this.imgAlchemist = await loadImage(absolute("./cj/1/alchemist.png"));
-    this.imgArmorer = await loadImage(absolute("./cj/1/armorer.png"));
-    this.imgBlacksmith = await loadImage(absolute("./cj/1/blacksmith.png"));
-    this.imgCarpenter = await loadImage(absolute("./cj/1/carpenter.png"));
-    this.imgCulinarian = await loadImage(absolute("./cj/1/culinarian.png"));
-    this.imgGoldsmith = await loadImage(absolute("./cj/1/goldsmith.png"));
-    this.imgLeatherworker = await loadImage(absolute("./cj/1/leatherworker.png"));
-    this.imgWeaver = await loadImage(absolute("./cj/1/weaver.png"));
+    this.imgAlchemist = await loadImage(absolute("./resources/class-jobs-icons/alchemist.png"));
+    this.imgArmorer = await loadImage(absolute("./resources/class-jobs-icons/armorer.png"));
+    this.imgBlacksmith = await loadImage(absolute("./resources/class-jobs-icons/blacksmith.png"));
+    this.imgCarpenter = await loadImage(absolute("./resources/class-jobs-icons/carpenter.png"));
+    this.imgCulinarian = await loadImage(absolute("./resources/class-jobs-icons/culinarian.png"));
+    this.imgGoldsmith = await loadImage(absolute("./resources/class-jobs-icons/goldsmith.png"));
+    this.imgLeatherworker = await loadImage(absolute("./resources/class-jobs-icons/leatherworker.png"));
+    this.imgWeaver = await loadImage(absolute("./resources/class-jobs-icons/weaver.png"));
 
-    this.imgBotanist = await loadImage(absolute("./cj/1/botanist.png"));
-    this.imgFisher = await loadImage(absolute("./cj/1/fisher.png"));
-    this.imgMiner = await loadImage(absolute("./cj/1/miner.png"));
+    this.imgBotanist = await loadImage(absolute("./resources/class-jobs-icons/botanist.png"));
+    this.imgFisher = await loadImage(absolute("./resources/class-jobs-icons/fisher.png"));
+    this.imgMiner = await loadImage(absolute("./resources/class-jobs-icons/miner.png"));
 
-    this.imgGladiator = await loadImage(absolute("./cj/1/gladiator.png"));
-    this.imgPaladin = await loadImage(absolute("./cj/1/paladin.png"));
-    this.imgMarauder = await loadImage(absolute("./cj/1/marauder.png"));
-    this.imgWarrior = await loadImage(absolute("./cj/1/warrior.png"));
-    this.imgDarkKnight = await loadImage(absolute("./cj/1/darkknight.png"));
-    this.imgGunbreaker = await loadImage(absolute("./cj/1/gunbreaker.png"));
+    this.imgGladiator = await loadImage(absolute("./resources/class-jobs-icons/gladiator.png"));
+    this.imgPaladin = await loadImage(absolute("./resources/class-jobs-icons/paladin.png"));
+    this.imgMarauder = await loadImage(absolute("./resources/class-jobs-icons/marauder.png"));
+    this.imgWarrior = await loadImage(absolute("./resources/class-jobs-icons/warrior.png"));
+    this.imgDarkKnight = await loadImage(absolute("./resources/class-jobs-icons/darkknight.png"));
+    this.imgGunbreaker = await loadImage(absolute("./resources/class-jobs-icons/gunbreaker.png"));
 
-    this.imgConjurer = await loadImage(absolute("./cj/1/conjurer.png"));
-    this.imgWhitemage = await loadImage(absolute("./cj/1/whitemage.png"));
-    this.imgScholar = await loadImage(absolute("./cj/1/scholar.png"));
-    this.imgAstrologian = await loadImage(absolute("./cj/1/astrologian.png"));
+    this.imgConjurer = await loadImage(absolute("./resources/class-jobs-icons/conjurer.png"));
+    this.imgWhitemage = await loadImage(absolute("./resources/class-jobs-icons/whitemage.png"));
+    this.imgScholar = await loadImage(absolute("./resources/class-jobs-icons/scholar.png"));
+    this.imgAstrologian = await loadImage(absolute("./resources/class-jobs-icons/astrologian.png"));
 
-    this.imgArcher = await loadImage(absolute("./cj/1/archer.png"));
-    this.imgBard = await loadImage(absolute("./cj/1/bard.png"));
-    this.imgMachinist = await loadImage(absolute("./cj/1/machinist.png"));
-    this.imgDancer = await loadImage(absolute("./cj/1/dancer.png"));
+    this.imgArcher = await loadImage(absolute("./resources/class-jobs-icons/archer.png"));
+    this.imgBard = await loadImage(absolute("./resources/class-jobs-icons/bard.png"));
+    this.imgMachinist = await loadImage(absolute("./resources/class-jobs-icons/machinist.png"));
+    this.imgDancer = await loadImage(absolute("./resources/class-jobs-icons/dancer.png"));
 
-    this.imgLancer = await loadImage(absolute("./cj/1/lancer.png"));
-    this.imgDragoon = await loadImage(absolute("./cj/1/dragoon.png"));
-    this.imgPugilist = await loadImage(absolute("./cj/1/pugilist.png"));
-    this.imgMonk = await loadImage(absolute("./cj/1/monk.png"));
-    this.imgRogue = await loadImage(absolute("./cj/1/rogue.png"));
-    this.imgNinja = await loadImage(absolute("./cj/1/ninja.png"));
-    this.imgSamurai = await loadImage(absolute("./cj/1/samurai.png"));
+    this.imgLancer = await loadImage(absolute("./resources/class-jobs-icons/lancer.png"));
+    this.imgDragoon = await loadImage(absolute("./resources/class-jobs-icons/dragoon.png"));
+    this.imgPugilist = await loadImage(absolute("./resources/class-jobs-icons/pugilist.png"));
+    this.imgMonk = await loadImage(absolute("./resources/class-jobs-icons/monk.png"));
+    this.imgRogue = await loadImage(absolute("./resources/class-jobs-icons/rogue.png"));
+    this.imgNinja = await loadImage(absolute("./resources/class-jobs-icons/ninja.png"));
+    this.imgSamurai = await loadImage(absolute("./resources/class-jobs-icons/samurai.png"));
 
-    this.imgThaumaturge = await loadImage(absolute("./cj/1/thaumaturge.png"));
-    this.imgBlackmage = await loadImage(absolute("./cj/1/blackmage.png"));
-    this.imgArcanist = await loadImage(absolute("./cj/1/arcanist.png"));
-    this.imgSummoner = await loadImage(absolute("./cj/1/summoner.png"));
-    this.imgRedmage = await loadImage(absolute("./cj/1/redmage.png"));
+    this.imgThaumaturge = await loadImage(absolute("./resources/class-jobs-icons/thaumaturge.png"));
+    this.imgBlackmage = await loadImage(absolute("./resources/class-jobs-icons/blackmage.png"));
+    this.imgArcanist = await loadImage(absolute("./resources/class-jobs-icons/arcanist.png"));
+    this.imgSummoner = await loadImage(absolute("./resources/class-jobs-icons/summoner.png"));
+    this.imgRedmage = await loadImage(absolute("./resources/class-jobs-icons/redmage.png"));
 
-    this.imgBluemage = await loadImage(absolute('./cj/1/bluemage.png'));
+    this.imgBluemage = await loadImage(absolute('./resources/class-jobs-icons/bluemage.png'));
 
     this.imgJobBg = {};
     for (var i = 1; i <= 38; i++) {
-      this.imgJobBg[i] = await loadImage(absolute(`./cj/bg/${i}.png`));
+      this.imgJobBg[i] = await loadImage(absolute(`./resources/class-jobs-backgrounds/${i}.png`));
     }
 
     await this.countMountsMinions();
