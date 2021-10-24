@@ -1,14 +1,8 @@
 const fetch = require("node-fetch");
 const path = require("path");
 const { createCanvas, loadImage, registerFont } = require("canvas");
-const createilvlfilter = require('./createilvlfilter')
 
-let ilvlarray;
-console.log('Generating ilvl filter')
-createilvlfilter().then((ilvlfilter) => {
-  ilvlarray = ilvlfilter;
-  console.log("ilvl filter generated!")
-})
+const createIlvlFilter = require('./create-ilvl-filter');
 
 function absolute(relativePath) {
     return path.join(__dirname, relativePath);
@@ -192,6 +186,8 @@ class CardCreator {
       this.imgJobBg[i] = await loadImage(absolute(`./resources/class-jobs-backgrounds/${i}.png`));
     }
 
+    this.ilvlFilterIds = await createIlvlFilter(this.xivApiKey);
+
     await this.countMountsMinions();
   }
 
@@ -251,7 +247,6 @@ class CardCreator {
     var mainHandLvl = 0;
     var hasOffHand = false;
 
-    console.log(ilvlarray)
     for (var key in gearset) {
       var piece = gearset[key];
 
@@ -264,7 +259,7 @@ class CardCreator {
       if (key == 'OffHand')
         hasOffHand = true;
 
-      if(ilvlarray.includes(piece.Item.ID) == true) {
+      if (this.ilvlFilterIds.includes(piece.Item.ID) == true) {
         ilvl += 1;
       } else {
         ilvl += piece.Item.LevelItem;
