@@ -5,7 +5,7 @@ const { createCanvas, loadImage, registerFont } = require("canvas");
 const createIlvlFilter = require('./create-ilvl-filter');
 
 function absolute(relativePath) {
-    return path.join(__dirname, relativePath);
+  return path.join(__dirname, relativePath);
 }
 
 registerFont(absolute('./resources/SourceSansPro-Regular.ttf'), { family: 'Source Sans Pro', style: 'Regular' });
@@ -80,6 +80,33 @@ const infoTextStartSpacing = 22;
 const infoTextSmallStartY = rectStartRow3Y + infoTextStartSpacing;
 const infoTextBigStartY = infoTextSmallStartY + 25;
 const infoTextSpacing = 50;
+
+const languageStrings = {
+  en: {
+    raceAndClan: 'Race & Clan',
+    guardian: 'Guardian',
+    grandCompany: 'Grand Company',
+    freeCompany: 'Free Company',
+    elementalLevel: 'Elemental Level',
+    eurekaLevel: 'Level',
+    resistanceRank: 'Resistance Rank',
+    bozjaRank: 'Rank',
+    mounts: 'Mounts',
+    minions: 'Minions',
+  },
+  de: {
+    raceAndClan: 'Volk & Stamm',
+    guardian: 'Schutzgott',
+    grandCompany: 'Staatliche Gesellschaft',
+    freeCompany: 'Freie Gesellschaft',
+    elementalLevel: 'Das Verbotene Land Eureka',
+    eurekaLevel: 'Elementarstufe',
+    resistanceRank: 'Bozja-Südfront',
+    bozjaRank: 'Widerstandsstufe',
+    mounts: 'Reittiere',
+    minions: 'Begleiter',
+  },
+};
 
 class CardCreator {
   /**
@@ -264,7 +291,7 @@ class CardCreator {
       } else {
         ilvl += piece.Item.LevelItem;
       }
-      
+
       cnt++;
     }
 
@@ -296,6 +323,7 @@ class CardCreator {
    * The image should be the same resolution as the default image. The default image size can be
    * retrieved with {@link CardCreator#canvasSize}. May be a URL, `data: `URI, a local file path,
    * or a Buffer instance.
+   * @param {string} [language] The language that the cards should be in use for the request
    * @example
    * const fs = require("fs");
    * 
@@ -310,19 +338,20 @@ class CardCreator {
    * });
    * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
    */
-  async createCard(charaId, customImage) {
-    const characterInfoUrl = `https://xivapi.com/character/${charaId}?extended=1&data=FC,mimo`;
+  async createCard(charaId, customImage, language = 'en') {
+    const strings = Object.keys(languageStrings).includes(language) ? languageStrings[language] : languageStrings.en;
+
+    const characterInfoUrl = `https://xivapi.com/character/${charaId}?language=${language}&extended=1&data=FC,mimo`;
     let response = await fetch(characterInfoUrl);
     if (!response.ok) {
       // Retry once if the request fails
       response = await fetch(characterInfoUrl);
     }
-
     const data = await response.json();
 
     const canvasSize = this.canvasSize;
     const canvas = createCanvas(canvasSize.width, canvasSize.height);
-    const ctx = canvas.getContext("2d");  
+    const ctx = canvas.getContext("2d");
 
     const portrait = await loadImage(data.Character.Portrait);
 
@@ -360,7 +389,7 @@ class CardCreator {
     ctx.textAlign = "center";
     ctx.font = med;
     ctx.fillStyle = primary;
-    
+
     if (data.Character.Title.Name !== undefined)
       ctx.fillText(data.Character.Title.Name, 450, 40);
 
@@ -370,16 +399,16 @@ class CardCreator {
     // Race, Clan, Guardian, GC, FC Titles
     ctx.font = small;
     ctx.textAlign = "left";
-    ctx.fillText("Race & Clan", 480, infoTextSmallStartY);
-    ctx.fillText("Guardian", 480, infoTextSmallStartY + infoTextSpacing);
+    ctx.fillText(strings.raceAndClan, 480, infoTextSmallStartY);
+    ctx.fillText(strings.guardian, 480, infoTextSmallStartY + infoTextSpacing);
     if (data.Character.GrandCompany.Company != null) {
-      ctx.fillText("Grand Company", 480, infoTextSmallStartY + infoTextSpacing * 2);
+      ctx.fillText(strings.grandCompany, 480, infoTextSmallStartY + infoTextSpacing * 2);
     }
     if (data.Character.FreeCompanyName != null) {
-      ctx.fillText("Free Company", 480, infoTextSmallStartY + infoTextSpacing * 3);
+      ctx.fillText(strings.freeCompany, 480, infoTextSmallStartY + infoTextSpacing * 3);
     }
-      ctx.fillText("Elemental Level", 480, 425);
-      ctx.fillText("Resistance Rank", 480, 475);
+    ctx.fillText(strings.elementalLevel, 480, 425);
+    ctx.fillText(strings.resistanceRank, 480, 475);
 
 
     ctx.fillStyle = grey;
@@ -410,7 +439,7 @@ class CardCreator {
     ctx.drawImage(deityIcon, deityIconX, deityIconY, 28, 28);
 
     if (data.Character.GrandCompany.Company != null) {
-      ctx.fillText(data.Character.GrandCompany.Company.Name, 480, infoTextBigStartY + infoTextSpacing * 2);
+      ctx.fillText(data.Character.GrandCompany.Company.Name.replace('[p]', ''), 480, infoTextBigStartY + infoTextSpacing * 2);
 
       var gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
       ctx.drawImage(gcRankIcon, gcRankIconX, gcRankIconY, 40, 40);
@@ -435,15 +464,15 @@ class CardCreator {
     ctx.fillStyle = white;
 
     if (data.Character.ClassJobsElemental.Level != null) {
-      ctx.fillText(`Level ${data.Character.ClassJobsElemental.Level}`, 480, 450);
+      ctx.fillText(`${strings.eurekaLevel} ${data.Character.ClassJobsElemental.Level}`, 480, 450);
     } else {
-      ctx.fillText(`Level 0`, 480, 450);
+      ctx.fillText(`${strings.eurekaLevel} 0`, 480, 450);
     }
 
     if (data.Character.ClassJobsBozjan.Level != null) {
-      ctx.fillText(`Rank ${data.Character.ClassJobsBozjan.Level}`, 480, 500);
+      ctx.fillText(`${strings.bozjaRank} ${data.Character.ClassJobsBozjan.Level}`, 480, 500);
     } else {
-      ctx.fillText(`Rank 0`, 480, 500);
+      ctx.fillText(`${strings.bozjaRank} 0`, 480, 500);
     }
 
     // Minion & Mount percentages
@@ -451,7 +480,7 @@ class CardCreator {
     if (data.Mounts !== null) {
       mountsPct = Math.ceil((data.Mounts.length / this.countMount) * 100);
     }
-    
+
     var minionsPct = '0';
     if (data.Minions !== null) {
       minionsPct = Math.ceil((data.Minions.length / this.countMinion) * 100);
@@ -466,8 +495,8 @@ class CardCreator {
     ctx.fillStyle = grey;
     ctx.font = small;
 
-    ctx.fillText("Mounts", 480 + mountsMeasure.width + 5, textMountMinionY);
-    ctx.fillText("Minions", 685 + minionsMeasure.width + 5, textMountMinionY);
+    ctx.fillText(strings.mounts, 480 + mountsMeasure.width + 5, textMountMinionY);
+    ctx.fillText(strings.minions, 685 + minionsMeasure.width + 5, textMountMinionY);
 
     ctx.drawImage(this.imgMount, 620, iconMountMinionY, 32, 32);
     ctx.drawImage(this.imgMinion, 834, iconMountMinionY, 19, 32);
@@ -554,7 +583,7 @@ class CardCreator {
 
     // Healers
     if (data.Character.ClassJobs[8].UnlockedState.ID == 24) {
-      ctx.drawImage(this.imgWhitemage, 630, jobsRowIcon1Y, 30, 30);  
+      ctx.drawImage(this.imgWhitemage, 630, jobsRowIcon1Y, 30, 30);
     } else {
       ctx.drawImage(this.imgConjurer, 630, jobsRowIcon1Y, 30, 30);
     }
@@ -624,9 +653,9 @@ class CardCreator {
 
     // Caster
     if (data.Character.ClassJobs[14].UnlockedState.ID == 25) {
-      ctx.drawImage(this.imgBlackmage, 630, jobsRowIcon2Y, 30, 30); 
+      ctx.drawImage(this.imgBlackmage, 630, jobsRowIcon2Y, 30, 30);
     } else {
-      ctx.drawImage(this.imgThaumaturge, 630, jobsRowIcon2Y, 30, 30); 
+      ctx.drawImage(this.imgThaumaturge, 630, jobsRowIcon2Y, 30, 30);
     }
     ctx.fillText(data.Character.ClassJobs[14].Level, cJobsRowTextX, jobsRowText2Y);
     cJobsRowTextX += jobsRowTextSize;
@@ -652,7 +681,7 @@ class CardCreator {
     ctx.font = copyright;
 
     ctx.fillText(`© 2010 - ${this.copyrightYear} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5);
-
+    
     return canvas.toBuffer();
   }
 }
