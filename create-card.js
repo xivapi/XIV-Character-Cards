@@ -392,17 +392,17 @@ class CardCreator {
       ctx.drawImage(this.cjIcons.redmage, 690, jobsRowIcon2Y, 30, 30); // Redmage
       ctx.drawImage(this.cjIcons.bluemage, 780, jobsRowIcon2Y, 33, 33); // Bluemage
 
-      ctx.drawImage(this.cjIcons.alchemist, 480, jobsRowIcon3Y, 30, 30); // Alchemist
-      ctx.drawImage(this.cjIcons.armorer, 510, jobsRowIcon3Y, 30, 30); // Armorer
-      ctx.drawImage(this.cjIcons.blacksmith, 540, jobsRowIcon3Y, 30, 30); // Blacksmith
-      ctx.drawImage(this.cjIcons.carpenter, 570, jobsRowIcon3Y, 30, 30); // Carpenter
-      ctx.drawImage(this.cjIcons.culinarian, 600, jobsRowIcon3Y, 30, 30); // Culinarian
-      ctx.drawImage(this.cjIcons.goldsmith, 630, jobsRowIcon3Y, 30, 30); // Goldsmith
-      ctx.drawImage(this.cjIcons.leatherworker, 660, jobsRowIcon3Y, 30, 30); // Leatherworker
-      ctx.drawImage(this.cjIcons.weaver, 690, jobsRowIcon3Y, 30, 30); // Weaver
-      ctx.drawImage(this.cjIcons.botanist, 750, jobsRowIcon3Y, 30, 30); // Botanist
-      ctx.drawImage(this.cjIcons.fisher, 780, jobsRowIcon3Y, 30, 30); // Fisher
-      ctx.drawImage(this.cjIcons.miner, 810, jobsRowIcon3Y, 30, 30); // Miner
+      ctx.drawImage(this.cjIcons.carpenter, 480, jobsRowIcon3Y, 30, 30); // Carpenter
+      ctx.drawImage(this.cjIcons.blacksmith, 510, jobsRowIcon3Y, 30, 30); // Blacksmith
+      ctx.drawImage(this.cjIcons.armorer, 540, jobsRowIcon3Y, 30, 30); // Armorer
+      ctx.drawImage(this.cjIcons.goldsmith, 570, jobsRowIcon3Y, 30, 30); // Goldsmith
+      ctx.drawImage(this.cjIcons.leatherworker, 600, jobsRowIcon3Y, 30, 30); // Leatherworker
+      ctx.drawImage(this.cjIcons.weaver, 630, jobsRowIcon3Y, 30, 30); // Weaver
+      ctx.drawImage(this.cjIcons.alchemist, 660, jobsRowIcon3Y, 30, 30); // Alchemist
+      ctx.drawImage(this.cjIcons.culinarian, 690, jobsRowIcon3Y, 30, 30); // Culinarian
+      ctx.drawImage(this.cjIcons.miner, 750, jobsRowIcon3Y, 30, 30); // Miner
+      ctx.drawImage(this.cjIcons.botanist, 780, jobsRowIcon3Y, 30, 30); // Botanist
+      ctx.drawImage(this.cjIcons.fisher, 810, jobsRowIcon3Y, 30, 30); // Fisher
     }
 
     // Draw info from character data
@@ -561,27 +561,27 @@ class CardCreator {
 
       // Third row
       rowTextX = jobsRowTextStartX;
-      ctx.fillText(ClassJobs[24].Level, rowTextX, jobsRowText3Y); // Alchemist
-      rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[20].Level, rowTextX, jobsRowText3Y); // Armorer
+      ctx.fillText(ClassJobs[18].Level, rowTextX, jobsRowText3Y); // Carpenter
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[19].Level, rowTextX, jobsRowText3Y); // Blacksmith
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[18].Level, rowTextX, jobsRowText3Y); // Carpenter
-      rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[25].Level, rowTextX, jobsRowText3Y); // Culinarian
+      ctx.fillText(ClassJobs[20].Level, rowTextX, jobsRowText3Y); // Armorer
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[21].Level, rowTextX, jobsRowText3Y); // Goldsmith
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[22].Level, rowTextX, jobsRowText3Y); // Leatherworker
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[23].Level, rowTextX, jobsRowText3Y); // Weaver
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[24].Level, rowTextX, jobsRowText3Y); // Alchemist
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[25].Level, rowTextX, jobsRowText3Y); // Culinarian
       rowTextX += jobsRowTextSpacer;
+      ctx.fillText(ClassJobs[26].Level, rowTextX, jobsRowText3Y); // Miner
+      rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[27].Level, rowTextX, jobsRowText3Y); // Botanist
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[28].Level, rowTextX, jobsRowText3Y); // Fisher
-      rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[26].Level, rowTextX, jobsRowText3Y); // Miner
     }
 
     // Remaining asynchronous drawing
@@ -597,7 +597,7 @@ class CardCreator {
         }),
       ]);
     }
-    
+
     return canvas.toBuffer();
   }
 }
