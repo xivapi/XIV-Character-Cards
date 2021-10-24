@@ -81,6 +81,7 @@ const infoTextSmallStartY = rectStartRow3Y + infoTextStartSpacing;
 const infoTextBigStartY = infoTextSmallStartY + 25;
 const infoTextSpacing = 50;
 
+const xivApiSupportedLanguages = ['en', 'ja', 'de', 'fr'];
 const languageStrings = {
   en: {
     raceAndClan: 'Race & Clan',
@@ -217,11 +218,11 @@ class CardCreator {
 
     const imageData = ctx.getImageData(0, 0, 128, 128);
     const pixelData = imageData.data;
-    
+
     // Iterate over all pixels, where one consists of 4 numbers: r, g, b and a
     for (let index = 0; index < pixelData.length; index += 4) {
       const [r, g, b] = pixelData.slice(index, index + 3);
-      
+
       // If the pixel is a special grey, change it to be transparent (a = 0)
       if (r == 64 && g == 64 && b == 64) {
         pixelData[index] = 0;
@@ -239,10 +240,10 @@ class CardCreator {
     let itemLevelSum = 0;
 
     for (const [key, piece] of Object.entries(gearset)) {
-      
+
       // Exclude SoulCrystal from item level sum
       if (key !== 'SoulCrystal') {
-      
+
         // If this item is a special one, increase the total item level by only 1
         if (this.ilvlFilterIds.includes(piece.Item.ID) == true) {
           itemLevelSum += 1;
@@ -255,7 +256,7 @@ class CardCreator {
     // If there is no OffHand, the MainHand item level counts twice
     if (gearset.Offhand != null && typeof gearset.MainHand != 'number') {
       const piece = gearset.MainHand;
-      
+
       // If this item is a special one, increase the total item level by only 1
       if (this.ilvlFilterIds.includes(piece.Item.ID) == true) {
         itemLevelSum += 1;
@@ -275,9 +276,14 @@ class CardCreator {
     return '0'.repeat(paddingCount) + string;
   }
 
+  classOrJobIcon(classJob, unlockId, className, jobName) {
+    if (classJob?.UnlockedState?.ID === unlockId) return this.cjIcons[jobName];
+    else return this.cjIcons[className];
+  }
+
   /**
    * Creates a character card for a character.
-   * @param {number | string} charaId The Lodestone ID of the character to generate a card for.
+   * @param {number | string} characterId The Lodestone ID of the character to generate a card for.
    * @param {string | Buffer | null | undefined} customImage Optional parameter providing a custom
    * image to be drawn between the background of the character card and the black information boxes.
    * The image should be the same resolution as the default image. The default image size can be
@@ -298,350 +304,300 @@ class CardCreator {
    * });
    * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
    */
-  async createCard(charaId, customImage, language = 'en') {
-    const strings = Object.keys(languageStrings).includes(language) ? languageStrings[language] : languageStrings.en;
+  async createCard(characterId, customImage, language = 'en') {
+    const supportedLanguage = xivApiSupportedLanguages.includes(language) ? language : 'en';
+    const strings = Object.keys(languageStrings).includes(supportedLanguage) ? languageStrings[supportedLanguage] : languageStrings.en;
 
-    const characterInfoUrl = `https://xivapi.com/character/${charaId}?language=${language}&extended=1&data=FC,mimo`;
-    let response = await fetch(characterInfoUrl);
-    if (!response.ok) {
+    // Request all API data as early as possible
+    const neededFields = [
+      'Character.ActiveClassJob.UnlockedState.ID', 'Character.ClassJobs.*.Level', 'Character.ClassJobs.*.UnlockedState.ID', 'Character.ClassJobsBozjan.Level', 'Character.ClassJobsElemental.Level',
+      'Character.DC', 'Character.FreeCompanyName', 'Character.GearSet.Gear', 'Character.GrandCompany.Company.Name', 'Character.GrandCompany.Rank.Icon', 'Character.GuardianDeity.Name',
+      'Character.GuardianDeity.Icon', 'Character.Name', 'Character.Portrait', 'Character.Race.Name', 'Character.Tribe.Name', 'Character.Server', 'Character.Title.Name',
+      'FreeCompany.Crest', 'FreeCompany.Tag', 'Minions.*.dummy', 'Mounts.*.dummy',
+    ];
+
+    const characterInfoUrl = new URL(`https://xivapi.com/character/${encodeURIComponent(characterId)}`)
+    characterInfoUrl.searchParams.set('language', supportedLanguage);
+    characterInfoUrl.searchParams.set('extended', '1');
+    characterInfoUrl.searchParams.set('data', 'FC,MIMO');
+    characterInfoUrl.searchParams.set('columns', neededFields.join(','));
+    if (typeof this.xivApiKey === 'string' && this.xivApiKey !== '') url.searchParams.set('private_key', this.xivApiKey);
+
+    const dataPromise = fetch(characterInfoUrl)
       // Retry once if the request fails
-      response = await fetch(characterInfoUrl);
-    }
-    const data = await response.json();
+      .then(response => response.ok ? response : fetch(characterInfoUrl))
+      .then(response => response.json());
 
+    const customImagePromise = customImage != null ? loadImage(customImage) : Promise.resolve();
+    const portraitPromise = dataPromise.then(data => loadImage(data.Character.Portrait));
+    const deityPromise = dataPromise.then(data => loadImage(`https://xivapi.com/${data.Character.GuardianDeity.Icon}`));
+    const gcRankPromise = dataPromise.then(data => data.Character.GrandCompany.Company != null ? loadImage(`https://xivapi.com/${data.Character.GrandCompany.Rank.Icon}`) : null);
+    const fcCrestPromise = dataPromise.then(data => data.Character.FreeCompanyName != null ? this.createCrest(data.FreeCompany.Crest) : null);
+
+    // Build canvas and only await data, when actually needed
     const canvasSize = this.canvasSize;
     const canvas = createCanvas(canvasSize.width, canvasSize.height);
     const ctx = canvas.getContext('2d');
+    ctx.save();
 
-    const portrait = await loadImage(data.Character.Portrait);
-
+    // Draw background
     ctx.drawImage(this.images.background, 0, 0, canvasSize.width, canvasSize.height + 2);
 
-    ctx.drawImage(portrait, 0, 120, 441, 600);
-
-    if (customImage != null) {
-      const bg = await loadImage(customImage);
-
-      ctx.drawImage(bg, 0, 0, canvasSize.width, canvasSize.height);
+    // Draw custom background image
+    const customLoadedImage = await customImagePromise;
+    if (customLoadedImage != null) {
+      ctx.drawImage(customLoadedImage, 0, 0, canvasSize.width, canvasSize.height);
     }
 
-    ctx.strokeStyle = white;
+    // Draw dark background boxes
     ctx.fillStyle = black;
-    ctx.beginPath();
-    // Name, Title, Server Rect
-    ctx.fillRect(25, 10, 840, 100);
+    ctx.fillRect(25, 10, 840, 100); // Name, Title, Server
+    ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2); // Mounts
+    ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2); // Minions
+    ctx.fillRect(rectStartX, rectStartRow3Y, rectFullWidth, rectHeightRow3); // Character information
+    ctx.fillRect(rectStartX, rectStartRow4Y, rectFullWidth, rectHeightRow4); // Eureka & Bozja
+    ctx.fillRect(rectStartX, rectStartRow5Y, rectFullWidth, rectHeightRow5); // Classes & Jobs
+    ctx.restore(); ctx.save();
 
-    // BLU returns a null UnlockedState.ID so we can't use it to pick the job image.
-    if (data.Character.ActiveClassJob.UnlockedState.ID != null) {
-      ctx.drawImage(this.jobBackgrounds[data.Character.ActiveClassJob.UnlockedState.ID], 450, 4, rectFullWidth, 110);
-    } else {
-      ctx.drawImage(this.jobBackgrounds[36], 450, 4, rectFullWidth, 110);
-    }
-
-    ctx.fillRect(rectStartX, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
-    ctx.fillRect(rectStartXHalf, rectStartRow2Y, rectHalfWidth, rectHeightRow2);
-
-    ctx.fillRect(rectStartX, rectStartRow3Y, rectFullWidth, rectHeightRow3); //info
-    ctx.fillRect(rectStartX, rectStartRow4Y, rectFullWidth, rectHeightRow4); // bozja
-    ctx.fillRect(rectStartX, rectStartRow5Y, rectFullWidth, rectHeightRow5);
-    ctx.stroke();
-
-    ctx.textAlign = 'center';
-    ctx.font = med;
+    // Draw non data dependent text
+    ctx.textAlign = 'left';
+    ctx.font = small;
     ctx.fillStyle = primary;
+    ctx.fillText(strings.raceAndClan, 480, infoTextSmallStartY); // Race & Clan
+    ctx.fillText(strings.guardian, 480, infoTextSmallStartY + infoTextSpacing); // Guardian
+    ctx.fillText(strings.elementalLevel, 480, 425); // Elemental level
+    ctx.fillText(strings.resistanceRank, 480, 475); // Resistance rank
 
-    if (data.Character.Title.Name !== undefined)
-      ctx.fillText(data.Character.Title.Name, 450, 40);
-
-    ctx.font = small;
-    ctx.fillText(`${data.Character.Server} (${data.Character.DC})`, 450, 100);
-
-    // Race, Clan, Guardian, GC, FC Titles
-    ctx.font = small;
-    ctx.textAlign = 'left';
-    ctx.fillText(strings.raceAndClan, 480, infoTextSmallStartY);
-    ctx.fillText(strings.guardian, 480, infoTextSmallStartY + infoTextSpacing);
-    if (data.Character.GrandCompany.Company != null) {
-      ctx.fillText(strings.grandCompany, 480, infoTextSmallStartY + infoTextSpacing * 2);
-    }
-    if (data.Character.FreeCompanyName != null) {
-      ctx.fillText(strings.freeCompany, 480, infoTextSmallStartY + infoTextSpacing * 3);
-    }
-    ctx.fillText(strings.elementalLevel, 480, 425);
-    ctx.fillText(strings.resistanceRank, 480, 475);
-
-
-    ctx.fillStyle = grey;
-    ctx.font = smed;
-
-    const ilvl = this.getItemLevel(data.Character.GearSet.Gear);
-    ctx.drawImage(this.images.shadow, 441 - 143, 110, 170, 90);
-    ctx.drawImage(this.images.ilvl, 441 - 92, 132, 24, 27);
-    ctx.fillText(ilvl, 441 - 65, 155);
-
-    ctx.fillStyle = white;
-    ctx.font = large;
-
-    ctx.textAlign = 'center';
-    // Chara Name
-    if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == '') {
-      ctx.fillText(data.Character.Name, 450, 80);
-    } else {
-      ctx.fillText(data.Character.Name, 450, 80);
-    }
-    // Race, Clan, Guardian, GC, FC Info
-    ctx.font = smed;
-    ctx.textAlign = 'left';
-    ctx.fillText(`${data.Character.Race.Name}, ${data.Character.Tribe.Name}`, 480, infoTextBigStartY);
-
-    ctx.fillText(data.Character.GuardianDeity.Name, 480, infoTextBigStartY + infoTextSpacing);
-    const deityIcon = await loadImage('https://xivapi.com/' + data.Character.GuardianDeity.Icon);
-    ctx.drawImage(deityIcon, deityIconX, deityIconY, 28, 28);
-
-    if (data.Character.GrandCompany.Company != null) {
-      ctx.fillText(data.Character.GrandCompany.Company.Name.replace('[p]', ''), 480, infoTextBigStartY + infoTextSpacing * 2);
-
-      const gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
-      ctx.drawImage(gcRankIcon, gcRankIconX, gcRankIconY, 40, 40);
-    }
-
-    if (data.Character.FreeCompanyName != null) {
-      const crestImage = await this.createCrest(data.FreeCompany.Crest);
-
-      if (crestImage !== null)
-        ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
-
-
-      const fcMeasure = ctx.measureText(data.Character.FreeCompanyName);
-      ctx.fillText(data.Character.FreeCompanyName, 480, infoTextBigStartY + infoTextSpacing * 3);
-
-      ctx.fillStyle = grey;
-      ctx.font = small;
-      ctx.fillText(`«${data.FreeCompany.Tag}»`, 480 + fcMeasure.width + 10, infoTextBigStartY + infoTextSpacing * 3);
-    }
-
-    ctx.font = smed;
-    ctx.fillStyle = white;
-
-    if (data.Character.ClassJobsElemental.Level != null) {
-      ctx.fillText(`${strings.eurekaLevel} ${data.Character.ClassJobsElemental.Level}`, 480, 450);
-    } else {
-      ctx.fillText(`${strings.eurekaLevel} 0`, 480, 450);
-    }
-
-    if (data.Character.ClassJobsBozjan.Level != null) {
-      ctx.fillText(`${strings.bozjaRank} ${data.Character.ClassJobsBozjan.Level}`, 480, 500);
-    } else {
-      ctx.fillText(`${strings.bozjaRank} 0`, 480, 500);
-    }
-
-    // Minion & Mount percentages
-    let mountsPct = '0';
-    if (data.Mounts !== null) {
-      mountsPct = Math.ceil((data.Mounts.length / this.mountCount) * 100);
-    }
-
-    let minionsPct = '0';
-    if (data.Minions !== null) {
-      minionsPct = Math.ceil((data.Minions.length / this.minionCount) * 100);
-    }
-
-    const mountsMeasure = ctx.measureText(`${mountsPct}%`);
-    const minionsMeasure = ctx.measureText(`${minionsPct}%`);
-
-    ctx.fillText(`${mountsPct}%`, 480, textMountMinionY);
-    ctx.fillText(`${minionsPct}%`, 685, textMountMinionY);
-
-    ctx.fillStyle = grey;
-    ctx.font = small;
-
-    ctx.fillText(strings.mounts, 480 + mountsMeasure.width + 5, textMountMinionY);
-    ctx.fillText(strings.minions, 685 + minionsMeasure.width + 5, textMountMinionY);
-
-    ctx.drawImage(this.images.mount, 620, iconMountMinionY, 32, 32);
-    ctx.drawImage(this.images.minion, 834, iconMountMinionY, 19, 32);
-
-    ctx.fillStyle = white;
-
-
-    // Why are there so many fucking jobs in this game?
-    // Crafting
-    ctx.textAlign = 'center';
-
-    let cJobsRowTextX = jobsRowTextStartX;
-    ctx.drawImage(this.cjIcons.alchemist, 480, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[24].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.armorer, 510, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[20].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.blacksmith, 540, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[19].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.carpenter, 570, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[18].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.culinarian, 600, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[25].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.goldsmith, 630, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[21].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.leatherworker, 660, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[22].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.weaver, 690, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[23].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSpacer;
-
-    // Gathering
-    ctx.drawImage(this.cjIcons.botanist, 750, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[27].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.fisher, 780, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[28].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.miner, 810, jobsRowIcon3Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[26].Level, cJobsRowTextX, jobsRowText3Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    // Tanks
-    cJobsRowTextX = jobsRowTextStartX;
-
-    if (data.Character.ClassJobs[0].UnlockedState.ID == 19) {
-      ctx.drawImage(this.cjIcons.paladin, 480, jobsRowIcon1Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.gladiator, 480, jobsRowIcon1Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[0].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    if (data.Character.ClassJobs[1].UnlockedState.ID == 21) {
-      ctx.drawImage(this.cjIcons.warrior, 510, jobsRowIcon1Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.marauder, 510, jobsRowIcon1Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[1].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.darkknight, 540, jobsRowIcon1Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[2].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.gunbreaker, 570, jobsRowIcon1Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[3].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSpacer;
-
-    // Healers
-    if (data.Character.ClassJobs[8].UnlockedState.ID == 24) {
-      ctx.drawImage(this.cjIcons.whitemage, 630, jobsRowIcon1Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.conjurer, 630, jobsRowIcon1Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[8].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.scholar, 660, jobsRowIcon1Y, 30, 30);
-    if (data.Character.ClassJobs[9].Level >= 30) {
-      ctx.fillText(data.Character.ClassJobs[9].Level, cJobsRowTextX, jobsRowText1Y);
-    } else {
-      ctx.fillText('0', cJobsRowTextX, jobsRowText1Y);
-    }
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.astrologian, 690, jobsRowIcon1Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[10].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSpacer;
-
-    // DPS
-    // Ranged
-    if (data.Character.ClassJobs[11].UnlockedState.ID == 23) {
-      ctx.drawImage(this.cjIcons.bard, 750, jobsRowIcon1Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.archer, 750, jobsRowIcon1Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[11].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.machinist, 780, jobsRowIcon1Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[12].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.dancer, 810, jobsRowIcon1Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[13].Level, cJobsRowTextX, jobsRowText1Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    // Melee
-    cJobsRowTextX = jobsRowTextStartX;
-
-    if (data.Character.ClassJobs[5].UnlockedState.ID == 22) {
-      ctx.drawImage(this.cjIcons.dragoon, 480, jobsRowIcon2Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.lancer, 480, jobsRowIcon2Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[5].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    if (data.Character.ClassJobs[4].UnlockedState.ID == 20) {
-      ctx.drawImage(this.cjIcons.monk, 510, jobsRowIcon2Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.pugilist, 510, jobsRowIcon2Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[4].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    if (data.Character.ClassJobs[6].UnlockedState.ID == 30) {
-      ctx.drawImage(this.cjIcons.ninja, 540, jobsRowIcon2Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.rogue, 540, jobsRowIcon2Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[6].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.samurai, 570, jobsRowIcon2Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[7].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSpacer;
-
-    // Caster
-    if (data.Character.ClassJobs[14].UnlockedState.ID == 25) {
-      ctx.drawImage(this.cjIcons.blackmage, 630, jobsRowIcon2Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.thaumaturge, 630, jobsRowIcon2Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[14].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    if (data.Character.ClassJobs[15].UnlockedState.ID == 27) {
-      ctx.drawImage(this.cjIcons.summoner, 660, jobsRowIcon2Y, 30, 30);
-    } else {
-      ctx.drawImage(this.cjIcons.arcanist, 660, jobsRowIcon2Y, 30, 30);
-    }
-    ctx.fillText(data.Character.ClassJobs[15].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    ctx.drawImage(this.cjIcons.redmage, 690, jobsRowIcon2Y, 30, 30);
-    ctx.fillText(data.Character.ClassJobs[16].Level, cJobsRowTextX, jobsRowText2Y);
-    cJobsRowTextX += jobsRowTextSize;
-
-    // Limited
-    ctx.drawImage(this.cjIcons.bluemage, 780, jobsRowIcon2Y, 33, 33);
-    ctx.fillText(data.Character.ClassJobs[17].Level, 796, jobsRowText2Y);
-
-    ctx.textAlign = 'left';
-    ctx.fillStyle = black;
     ctx.font = copyright;
+    ctx.fillStyle = black;
+    ctx.fillText(`© 2010 - ${new Date().getFullYear()} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5); // Copyright
+    ctx.restore(); ctx.save();
 
-    ctx.fillText(`© 2010 - ${new Date().getFullYear()} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5);
+    // Draw non data dependent images
+    ctx.drawImage(this.images.shadow, 441 - 143, 110, 170, 90); // Item level shadow
+    ctx.drawImage(this.images.ilvl, 441 - 92, 132, 24, 27); // Item level icon
+    ctx.drawImage(this.images.mount, 620, iconMountMinionY, 32, 32); // Mount icon
+    ctx.drawImage(this.images.minion, 834, iconMountMinionY, 19, 32); // Minion icon
 
+    // Draw non data dependent job icons
+    {
+      ctx.drawImage(this.cjIcons.darkknight, 540, jobsRowIcon1Y, 30, 30); // Darkknight
+      ctx.drawImage(this.cjIcons.gunbreaker, 570, jobsRowIcon1Y, 30, 30); // Gunbreaker
+      ctx.drawImage(this.cjIcons.scholar, 660, jobsRowIcon1Y, 30, 30); // Scholar
+      ctx.drawImage(this.cjIcons.astrologian, 690, jobsRowIcon1Y, 30, 30); // Astrologian
+
+      ctx.drawImage(this.cjIcons.machinist, 780, jobsRowIcon1Y, 30, 30); // Machinist
+      ctx.drawImage(this.cjIcons.dancer, 810, jobsRowIcon1Y, 30, 30); // Dancer
+      ctx.drawImage(this.cjIcons.samurai, 570, jobsRowIcon2Y, 30, 30); // Samurai
+      ctx.drawImage(this.cjIcons.redmage, 690, jobsRowIcon2Y, 30, 30); // Redmage
+      ctx.drawImage(this.cjIcons.bluemage, 780, jobsRowIcon2Y, 33, 33); // Bluemage
+
+      ctx.drawImage(this.cjIcons.alchemist, 480, jobsRowIcon3Y, 30, 30); // Alchemist
+      ctx.drawImage(this.cjIcons.armorer, 510, jobsRowIcon3Y, 30, 30); // Armorer
+      ctx.drawImage(this.cjIcons.blacksmith, 540, jobsRowIcon3Y, 30, 30); // Blacksmith
+      ctx.drawImage(this.cjIcons.carpenter, 570, jobsRowIcon3Y, 30, 30); // Carpenter
+      ctx.drawImage(this.cjIcons.culinarian, 600, jobsRowIcon3Y, 30, 30); // Culinarian
+      ctx.drawImage(this.cjIcons.goldsmith, 630, jobsRowIcon3Y, 30, 30); // Goldsmith
+      ctx.drawImage(this.cjIcons.leatherworker, 660, jobsRowIcon3Y, 30, 30); // Leatherworker
+      ctx.drawImage(this.cjIcons.weaver, 690, jobsRowIcon3Y, 30, 30); // Weaver
+      ctx.drawImage(this.cjIcons.botanist, 750, jobsRowIcon3Y, 30, 30); // Botanist
+      ctx.drawImage(this.cjIcons.fisher, 780, jobsRowIcon3Y, 30, 30); // Fisher
+      ctx.drawImage(this.cjIcons.miner, 810, jobsRowIcon3Y, 30, 30); // Miner
+    }
+
+    // Draw info from character data
+    const { Character, FreeCompany, Mounts, Minions } = await dataPromise;
+
+    // Header
+    {
+      const activeClassJob = Character.ActiveClassJob.UnlockedState.ID ?? 36; // BLU returns a null UnlockedState.ID so we can't use it to pick the job image
+      ctx.drawImage(this.jobBackgrounds[activeClassJob - 1], 450, 4, rectFullWidth, 110); // Current class/job background
+
+      ctx.textAlign = 'center';
+      ctx.font = med;
+      ctx.fillStyle = primary;
+      if (Character.Title.Name != null) ctx.fillText(Character.Title.Name, 450, 40); // Character title
+
+      ctx.font = small;
+      ctx.fillText(`${Character.Server} (${Character.DC})`, 450, 100); // Character service & DC
+
+      ctx.font = large;
+      ctx.fillStyle = white;
+      ctx.fillText(Character.Name, 450, 80); // Character name
+      ctx.restore(); ctx.save();
+    }
+
+    // Item level
+    {
+      ctx.font = smed;
+      ctx.fillStyle = grey;
+      ctx.fillText(this.getItemLevel(Character.GearSet.Gear), 441 - 65, 155); // Item level
+      ctx.restore(); ctx.save();
+    }
+
+    // Mounts & Minions
+    {
+      const mountsPercentage = Math.ceil(((Mounts.length ?? 0) / this.mountCount) * 100);
+      const minionsPercentage = Math.ceil(((Minions.length ?? 0) / this.minionCount) * 100);
+
+      ctx.font = smed;
+      ctx.fillStyle = white;
+      const mountsMeasure = ctx.measureText(`${mountsPercentage}%`);
+      const minionsMeasure = ctx.measureText(`${minionsPercentage}%`);
+      ctx.fillText(`${mountsPercentage}%`, 480, textMountMinionY); // Mounts percentage
+      ctx.fillText(`${minionsPercentage}%`, 685, textMountMinionY); // Minions percentage
+
+      ctx.font = small;
+      ctx.fillStyle = grey;
+      ctx.fillText(strings.mounts, 480 + mountsMeasure.width + 5, textMountMinionY); // Mounts
+      ctx.fillText(strings.minions, 685 + minionsMeasure.width + 5, textMountMinionY); // Minions
+      ctx.restore(); ctx.save();
+    }
+
+    // Character information
+    {
+      ctx.font = smed;
+      ctx.fillStyle = white;
+      ctx.fillText(`${Character.Race.Name}, ${Character.Tribe.Name}`, 480, infoTextBigStartY); // Race & Clan
+      ctx.fillText(Character.GuardianDeity.Name, 480, infoTextBigStartY + infoTextSpacing); // Guardian
+
+      if (Character.GrandCompany.Company != null) {
+        ctx.font = small;
+        ctx.fillStyle = primary;
+        ctx.fillText(strings.grandCompany, 480, infoTextSmallStartY + infoTextSpacing * 2); // Grand Company
+
+        ctx.font = smed;
+        ctx.fillStyle = white;
+        ctx.fillText(Character.GrandCompany.Company.Name.replace('[p]', ''), 480, infoTextBigStartY + infoTextSpacing * 2); // Grand Company name
+      }
+
+      if (Character.FreeCompanyName != null) {
+        ctx.font = small;
+        ctx.fillStyle = primary;
+        ctx.fillText(strings.freeCompany, 480, infoTextSmallStartY + infoTextSpacing * 3); // Free Company
+
+        ctx.font = smed;
+        ctx.fillStyle = white;
+        ctx.fillText(Character.FreeCompanyName, 480, infoTextBigStartY + infoTextSpacing * 3); // Free Company name
+
+        const nameMeasure = ctx.measureText(Character.FreeCompanyName);
+        ctx.font = small;
+        ctx.fillStyle = grey;
+        ctx.fillText(`«${FreeCompany.Tag}»`, 480 + nameMeasure.width + 10, infoTextBigStartY + infoTextSpacing * 3); // Free Company tag
+      }
+      ctx.restore(); ctx.save();
+    }
+
+    // Eureka & Bozja
+    {
+      ctx.font = smed;
+      ctx.fillStyle = white;
+      ctx.fillText(`${strings.eurekaLevel} ${Character.ClassJobsElemental.Level ?? 0}`, 480, 450); // Elemental level
+      ctx.fillText(`${strings.bozjaRank} ${Character.ClassJobsBozjan.Level ?? 0}`, 480, 500); // Resistance rank
+      ctx.restore(); ctx.save();
+    }
+
+    // Classes & Jobs - data dependant job or class icons
+    {
+      const { ClassJobs } = Character;
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[0], 19, 'gladiator', 'paladin'), 480, jobsRowIcon1Y, 30, 30); // Gladiator/Paladin
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[1], 21, 'marauder', 'warrior'), 510, jobsRowIcon1Y, 30, 30); // Marauder/Warrior
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[8], 24, 'conjurer', 'whitemage'), 630, jobsRowIcon1Y, 30, 30); // Conjurer/Whitemage
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[11], 23, 'archer', 'bard'), 750, jobsRowIcon1Y, 30, 30); // Archer/Bard
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[5], 22, 'lancer', 'dragoon'), 480, jobsRowIcon2Y, 30, 30); // Lancer/Dragoon
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[4], 20, 'pugilist', 'monk'), 510, jobsRowIcon2Y, 30, 30); // Monk/Pugilist
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[6], 30, 'rogue', 'ninja'), 540, jobsRowIcon2Y, 30, 30); // Ninja/Rogue
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[14], 25, 'thaumaturge', 'blackmage'), 630, jobsRowIcon2Y, 30, 30); // Thaumaturge/Blackmage
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[15], 27, 'arcanist', 'summoner'), 660, jobsRowIcon2Y, 30, 30); // Summoner/Arcanist
+    }
+
+    // Classes & Jobs - levels
+    {
+      ctx.textAlign = 'center';
+      ctx.font = small;
+      ctx.fillStyle = white;
+
+      const { ClassJobs } = Character;
+
+      // First row
+      let rowTextX = jobsRowTextStartX;
+      ctx.fillText(ClassJobs[0].Level, rowTextX, jobsRowText1Y); // Gladiator/Paladin
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[1].Level, rowTextX, jobsRowText1Y); // Marauder/Warrior
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[2].Level, rowTextX, jobsRowText1Y); // Darkknight
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[3].Level, rowTextX, jobsRowText1Y); // Gunbreaker
+      rowTextX += jobsRowTextSpacer;
+      ctx.fillText(ClassJobs[8].Level, rowTextX, jobsRowText1Y); // Conjurer/Whitemage
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[9].Level >= 30 ? ClassJobs[9].Level : '0', rowTextX, jobsRowText1Y); // Scholar
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[10].Level, rowTextX, jobsRowText1Y); // Astrologian
+      rowTextX += jobsRowTextSpacer;
+      ctx.fillText(ClassJobs[11].Level, rowTextX, jobsRowText1Y); // Archer/Bard
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[12].Level, rowTextX, jobsRowText1Y); // Machinist
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[13].Level, rowTextX, jobsRowText1Y); // Dancer
+
+      // Second row
+      rowTextX = jobsRowTextStartX;
+      ctx.fillText(ClassJobs[5].Level, rowTextX, jobsRowText2Y); // Lancer/Dragoon
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[4].Level, rowTextX, jobsRowText2Y); // Monk/Pugilist
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[6].Level, rowTextX, jobsRowText2Y); // Ninja/Rogue
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[7].Level, rowTextX, jobsRowText2Y); // Samurai
+      rowTextX += jobsRowTextSpacer;
+      ctx.fillText(ClassJobs[14].Level, rowTextX, jobsRowText2Y); // Thaumaturge/Blackmage
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[15].Level, rowTextX, jobsRowText2Y); // Summoner/Arcanist
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[16].Level, rowTextX, jobsRowText2Y); // Redmage
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[17].Level, 796, jobsRowText2Y); // Bluemage
+
+      // Third row
+      rowTextX = jobsRowTextStartX;
+      ctx.fillText(ClassJobs[24].Level, rowTextX, jobsRowText3Y); // Alchemist
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[20].Level, rowTextX, jobsRowText3Y); // Armorer
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[19].Level, rowTextX, jobsRowText3Y); // Blacksmith
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[18].Level, rowTextX, jobsRowText3Y); // Carpenter
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[25].Level, rowTextX, jobsRowText3Y); // Culinarian
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[21].Level, rowTextX, jobsRowText3Y); // Goldsmith
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[22].Level, rowTextX, jobsRowText3Y); // Leatherworker
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[23].Level, rowTextX, jobsRowText3Y); // Weaver
+      rowTextX += jobsRowTextSpacer;
+      ctx.fillText(ClassJobs[27].Level, rowTextX, jobsRowText3Y); // Botanist
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[28].Level, rowTextX, jobsRowText3Y); // Fisher
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(ClassJobs[26].Level, rowTextX, jobsRowText3Y); // Miner
+    }
+
+    // Remaining asynchronous drawing
+    {
+      await Promise.all([
+        portraitPromise.then(portrait => ctx.drawImage(portrait, 0, 120, 441, 600)),
+        deityPromise.then(deityIcon => ctx.drawImage(deityIcon, deityIconX, deityIconY, 28, 28)),
+        gcRankPromise.then(gcRankIcon => {
+          if (gcRankIcon != null) ctx.drawImage(gcRankIcon, gcRankIconX, gcRankIconY, 40, 40);
+        }),
+        fcCrestPromise.then(fcCrestIcon => {
+          if (fcCrestIcon != null) ctx.drawImage(fcCrestIcon, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
+        }),
+      ]);
+    }
+    
     return canvas.toBuffer();
   }
 }
