@@ -236,48 +236,43 @@ class CardCreator {
   }
 
   getItemLevel(gearset) {
-    let ilvl = 0;
-    let cnt = 0;
-    let mainHandLvl = 0;
-    let hasOffHand = false;
+    let itemLevelSum = 0;
 
     for (const [key, piece] of Object.entries(gearset)) {
-      if (key == 'SoulCrystal')
-        continue;
-
-      if (key == 'MainHand')
-        mainHandLvl = piece.Item.LevelItem;
-
-      if (key == 'OffHand')
-        hasOffHand = true;
-
-      if (this.ilvlFilterIds.includes(piece.Item.ID) == true) {
-        ilvl += 1;
-      } else {
-        ilvl += piece.Item.LevelItem;
+      
+      // Exclude SoulCrystal from item level sum
+      if (key !== 'SoulCrystal') {
+      
+        // If this item is a special one, increase the total item level by only 1
+        if (this.ilvlFilterIds.includes(piece.Item.ID) == true) {
+          itemLevelSum += 1;
+        } else {
+          itemLevelSum += piece.Item.LevelItem;
+        }
       }
-
-      cnt++;
     }
 
-    if (!hasOffHand) {
-      ilvl += mainHandLvl;
-      cnt++;
+    // If there is no OffHand, the MainHand item level counts twice
+    if (gearset.Offhand != null && typeof gearset.MainHand != 'number') {
+      const piece = gearset.MainHand;
+      
+      // If this item is a special one, increase the total item level by only 1
+      if (this.ilvlFilterIds.includes(piece.Item.ID) == true) {
+        itemLevelSum += 1;
+      } else {
+        itemLevelSum += piece.Item.LevelItem;
+      }
     }
 
-    if (cnt == 0)
-      return 0;
-
-    // ilvl division is always out of 13 items
-    // mainhand counts twice if there's no offhand
-    // job stones are ignored
-    return this.pad(Math.floor(ilvl / 13), 4);
+    // Average item level computation is always for 13 items
+    // Job stones are ignored
+    return this.pad(Math.floor(itemLevelSum / 13), 4);
   }
 
-  pad(num, size) {
-    num = num.toString();
-    while (num.length < size) num = '0' + num;
-    return num;
+  pad(number, size) {
+    const string = String(number);
+    const paddingCount = Math.max(size - string.length, 0);
+    return '0'.repeat(paddingCount) + string;
   }
 
   /**
