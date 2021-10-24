@@ -152,8 +152,7 @@ class CardCreator {
   }
 
   async init() {
-    var d = new Date();
-    this.copyrightYear = d.getFullYear();
+    this.copyrightYear = new Date().getFullYear();
 
     this.bgImage = await loadImage(absolute('./resources/background.png'));
 
@@ -209,7 +208,7 @@ class CardCreator {
     this.imgBluemage = await loadImage(absolute('./resources/class-jobs-icons/bluemage.png'));
 
     this.imgJobBg = {};
-    for (var i = 1; i <= 38; i++) {
+    for (let i = 1; i <= 38; i++) {
       this.imgJobBg[i] = await loadImage(absolute(`./resources/class-jobs-backgrounds/${i}.png`));
     }
 
@@ -219,15 +218,15 @@ class CardCreator {
   }
 
   async countMountsMinions() {
-    var response = await fetch(`https://ffxivcollect.com/api/minions/`);
-    var data = await response.json();
+    const minionResponse = await fetch(`https://ffxivcollect.com/api/minions/`);
+    const minionData = await minionResponse.json();
 
-    this.countMinion = data.count;
+    this.countMinion = minionData.count;
 
-    var response = await fetch(`https://ffxivcollect.com/api/mounts/`);
-    var data = await response.json();
+    const mountResponse = await fetch(`https://ffxivcollect.com/api/mounts/`);
+    const mountData = await mountResponse.json();
 
-    this.countMount = data.count;
+    this.countMount = mountData.count;
 
     console.log(`Refreshed counts: ${this.countMinion} - ${this.countMount}`);
   }
@@ -239,17 +238,17 @@ class CardCreator {
     if (crestAry.length == 0)
       return null;
 
-    for (var i = 0; i < crestAry.length; i++) {
-      var crestLayer = await loadImage(crestAry[i]);
+    for (let i = 0; i < crestAry.length; i++) {
+      const crestLayer = await loadImage(crestAry[i]);
       ctx.drawImage(crestLayer, 0, 0, 128, 128);
     }
 
-    var imgd = ctx.getImageData(0, 0, 128, 128),
+    const imgd = ctx.getImageData(0, 0, 128, 128),
       pix = imgd.data,
       newColor = { r: 0, g: 0, b: 0, a: 0 };
 
-    for (var i = 0, n = pix.length; i < n; i += 4) {
-      var r = pix[i],
+    for (let i = 0, n = pix.length; i < n; i += 4) {
+      const r = pix[i],
         g = pix[i + 1],
         b = pix[i + 2];
 
@@ -269,14 +268,12 @@ class CardCreator {
   }
 
   getItemLevel(gearset) {
-    var ilvl = 0;
-    var cnt = 0;
-    var mainHandLvl = 0;
-    var hasOffHand = false;
+    let ilvl = 0;
+    let cnt = 0;
+    let mainHandLvl = 0;
+    let hasOffHand = false;
 
-    for (var key in gearset) {
-      var piece = gearset[key];
-
+    for (const [key, piece] of Object.entries(gearset)) {
       if (key == 'SoulCrystal')
         continue;
 
@@ -414,7 +411,7 @@ class CardCreator {
     ctx.fillStyle = grey;
     ctx.font = smed;
 
-    var ilvl = this.getItemLevel(data.Character.GearSet.Gear);
+    const ilvl = this.getItemLevel(data.Character.GearSet.Gear);
     ctx.drawImage(this.imgShadow, 441 - 143, 110, 170, 90);
     ctx.drawImage(this.imgIlvl, 441 - 92, 132, 24, 27);
     ctx.fillText(ilvl, 441 - 65, 155);
@@ -435,18 +432,18 @@ class CardCreator {
     ctx.fillText(`${data.Character.Race.Name}, ${data.Character.Tribe.Name}`, 480, infoTextBigStartY);
 
     ctx.fillText(data.Character.GuardianDeity.Name, 480, infoTextBigStartY + infoTextSpacing);
-    var deityIcon = await loadImage('https://xivapi.com/' + data.Character.GuardianDeity.Icon);
+    const deityIcon = await loadImage('https://xivapi.com/' + data.Character.GuardianDeity.Icon);
     ctx.drawImage(deityIcon, deityIconX, deityIconY, 28, 28);
 
     if (data.Character.GrandCompany.Company != null) {
       ctx.fillText(data.Character.GrandCompany.Company.Name.replace('[p]', ''), 480, infoTextBigStartY + infoTextSpacing * 2);
 
-      var gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
+      const gcRankIcon = await loadImage('https://xivapi.com/' + data.Character.GrandCompany.Rank.Icon);
       ctx.drawImage(gcRankIcon, gcRankIconX, gcRankIconY, 40, 40);
     }
 
     if (data.Character.FreeCompanyName != null) {
-      var crestImage = await this.createCrest(data.FreeCompany.Crest);
+      const crestImage = await this.createCrest(data.FreeCompany.Crest);
 
       if (crestImage !== null)
         ctx.drawImage(crestImage, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
@@ -476,12 +473,12 @@ class CardCreator {
     }
 
     // Minion & Mount percentages
-    var mountsPct = '0';
+    let mountsPct = '0';
     if (data.Mounts !== null) {
       mountsPct = Math.ceil((data.Mounts.length / this.countMount) * 100);
     }
 
-    var minionsPct = '0';
+    let minionsPct = '0';
     if (data.Minions !== null) {
       minionsPct = Math.ceil((data.Minions.length / this.countMinion) * 100);
     }
@@ -508,7 +505,7 @@ class CardCreator {
     // Crafting
     ctx.textAlign = 'center';
 
-    var cJobsRowTextX = jobsRowTextStartX;
+    let cJobsRowTextX = jobsRowTextStartX;
     ctx.drawImage(this.imgAlchemist, 480, jobsRowIcon3Y, 30, 30);
     ctx.fillText(data.Character.ClassJobs[24].Level, cJobsRowTextX, jobsRowText3Y);
     cJobsRowTextX += jobsRowTextSize;
