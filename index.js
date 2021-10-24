@@ -1,18 +1,17 @@
-const fetch = require("node-fetch");
+const cacheManager = require('cache-manager');
 const express = require('express');
-const app = express();
-const port = process.env.PORT || 5000;
+const fetch = require('node-fetch');
+const fsStore = require('cache-manager-fs-binary');
 
 const { CardCreator } = require('./create-card');
 
+const port = process.env.PORT || 5000;
+
+const app = express();
 const creator = new CardCreator();
 
-// node cachemanager
-var cacheManager = require('cache-manager');
-// storage for the cachemanager
-var fsStore = require('cache-manager-fs-binary');
-// initialize caching on disk
-var diskCache = cacheManager.caching({
+// Initialize caching on disk
+const diskCache = cacheManager.caching({
     store: fsStore,
     options: {
         reviveBuffers: true,
