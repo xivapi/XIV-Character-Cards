@@ -2,6 +2,7 @@ const cacheManager = require('cache-manager');
 const express = require('express');
 const fetch = require('node-fetch');
 const fsStore = require('cache-manager-fs-binary');
+const rateLimit = require("express-rate-limit");
 
 const { CardCreator } = require('./create-card');
 
@@ -23,6 +24,13 @@ const diskCache = cacheManager.caching({
     path: 'diskcache',
     preventfill: true,
   }
+});
+
+// Rate limit all requests that result in XIV API calls
+const limiter = rateLimit({
+  windowMs: 1000, // ms = 1s
+  max: 20, // default XIV API request limit
+  keyGenerator: () => 'global',
 });
 
 async function getCharacterIdByName(world, name, retries = 1) {
@@ -61,7 +69,7 @@ function getOriginalQueryString(req) {
   return url.search;
 }
 
-app.get('/prepare/id/:characterId', (req, res, next) => {
+app.get('/prepare/id/:characterId', limiter, (req, res, next) => {
   const language = typeof req.query.lang === 'string' && supportedLanguages.includes(req.query.lang) ? req.query.lang : supportedLanguages[0];
 
   cacheCreateCard(req.params.characterId, null, language)
@@ -74,7 +82,7 @@ app.get('/prepare/id/:characterId', (req, res, next) => {
     .catch(next);
 });
 
-app.get('/prepare/name/:world/:characterName', (req, res, next) => {
+app.get('/prepare/name/:world/:characterName', limiter, (req, res, next) => {
   getCharacterIdByName(req.params.world, req.params.characterName)
     .then(characterId => {
       if (characterId == null) {
@@ -86,7 +94,7 @@ app.get('/prepare/name/:world/:characterName', (req, res, next) => {
     .catch(next);
 });
 
-app.get('/characters/id/:characterId.png', (req, res, next) => {
+app.get('/characters/id/:characterId.png', limiter, (req, res, next) => {
   const language = typeof req.query.lang === 'string' && supportedLanguages.includes(req.query.lang) ? req.query.lang : supportedLanguages[0];
 
   cacheCreateCard(req.params.characterId, null, language)
@@ -108,7 +116,7 @@ app.get('/characters/id/:characterId', (req, res) => {
   res.redirect(`/characters/id/${req.params.characterId}.png${getOriginalQueryString(req)}`);
 });
 
-app.get('/characters/name/:world/:characterName.png', (req, res, next) => {
+app.get('/characters/name/:world/:characterName.png', limiter, (req, res, next) => {
   getCharacterIdByName(req.params.world, req.params.characterName)
     .then(characterId => {
       if (characterId == null) {
