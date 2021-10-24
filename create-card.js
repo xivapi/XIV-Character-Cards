@@ -91,8 +91,10 @@ class CardCreator {
   /**
    * Creates a new card creator.
    * @constructor
+   * @param {string} [xivApiKey] The API key for the XIV API to be used in all requests.
    */
-  constructor() {
+  constructor(xivApiKey = undefined) {
+    this.xivApiKey = typeof xivApiKey === 'string' && xivApiKey !== '' ? xivApiKey : undefined;
     this.isInit = false;
   }
 

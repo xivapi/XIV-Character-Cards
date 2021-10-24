@@ -11,7 +11,7 @@ const xivApiKey = typeof process.env.XIV_API_KEY === 'string' && process.env.XIV
 const supportedLanguages = ['en', 'ja', 'de', 'fr'];
 
 const app = express();
-const creator = new CardCreator();
+const creator = new CardCreator(xivApiKey);
 
 // Initialize caching on disk
 const diskCache = cacheManager.caching({
