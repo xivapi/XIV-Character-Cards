@@ -149,8 +149,6 @@ class CardCreator {
   }
 
   async init() {
-    this.copyrightYear = new Date().getFullYear();
-
     this.bgImage = await loadImage(absolute('./resources/background.png'));
 
     this.imgMinion = await loadImage(absolute('./resources/minion.png'));
@@ -674,7 +672,7 @@ class CardCreator {
     ctx.fillStyle = black;
     ctx.font = copyright;
 
-    ctx.fillText(`© 2010 - ${this.copyrightYear} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5);
+    ctx.fillText(`© 2010 - ${new Date().getFullYear()} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5);
 
     return canvas.toBuffer();
   }
