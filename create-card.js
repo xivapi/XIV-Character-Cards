@@ -1,6 +1,6 @@
-const fetch = require("node-fetch");
-const path = require("path");
-const { createCanvas, loadImage, registerFont } = require("canvas");
+const fetch = require('node-fetch');
+const path = require('path');
+const { createCanvas, loadImage, registerFont } = require('canvas');
 
 const createIlvlFilter = require('./create-ilvl-filter');
 
@@ -11,12 +11,12 @@ function absolute(relativePath) {
 registerFont(absolute('./resources/SourceSansPro-Regular.ttf'), { family: 'Source Sans Pro', style: 'Regular' });
 registerFont(absolute('./resources/SourceSansPro-SemiBold.ttf'), { family: 'Source Sans Pro', style: 'SemiBold' });
 
-const primary = "rgba(178, 214, 249, 1)";
-const white = "rgba(255, 255, 255,1)";
-const grey = "#868686";
-const black = "rgba(0,0,0,0.5)";
-const copyright = '"11px "Source Sans Pro"';
-const small = '"18px "Source Sans Pro"';
+const primary = 'rgba(178, 214, 249, 1)';
+const white = 'rgba(255, 255, 255,1)';
+const grey = '#868686';
+const black = 'rgba(0,0,0,0.5)';
+const copyright = '11px "Source Sans Pro"';
+const small = '18px "Source Sans Pro"';
 const med = '30px "Source Sans Pro"';
 const smed = '25px "Source Sans Pro"';
 const large = '45px "Source Sans Pro SemiBold"';
@@ -155,56 +155,56 @@ class CardCreator {
     var d = new Date();
     this.copyrightYear = d.getFullYear();
 
-    this.bgImage = await loadImage(absolute("./resources/background.png"));
+    this.bgImage = await loadImage(absolute('./resources/background.png'));
 
-    this.imgMinion = await loadImage(absolute("./resources/minion.png"));
-    this.imgMount = await loadImage(absolute("./resources/mount.png"));
-    this.imgIlvl = await loadImage(absolute("./resources/ilvl-icon.png"));
-    this.imgShadow = await loadImage(absolute("./resources/shadow.png"));
+    this.imgMinion = await loadImage(absolute('./resources/minion.png'));
+    this.imgMount = await loadImage(absolute('./resources/mount.png'));
+    this.imgIlvl = await loadImage(absolute('./resources/ilvl-icon.png'));
+    this.imgShadow = await loadImage(absolute('./resources/shadow.png'));
 
-    this.imgAlchemist = await loadImage(absolute("./resources/class-jobs-icons/alchemist.png"));
-    this.imgArmorer = await loadImage(absolute("./resources/class-jobs-icons/armorer.png"));
-    this.imgBlacksmith = await loadImage(absolute("./resources/class-jobs-icons/blacksmith.png"));
-    this.imgCarpenter = await loadImage(absolute("./resources/class-jobs-icons/carpenter.png"));
-    this.imgCulinarian = await loadImage(absolute("./resources/class-jobs-icons/culinarian.png"));
-    this.imgGoldsmith = await loadImage(absolute("./resources/class-jobs-icons/goldsmith.png"));
-    this.imgLeatherworker = await loadImage(absolute("./resources/class-jobs-icons/leatherworker.png"));
-    this.imgWeaver = await loadImage(absolute("./resources/class-jobs-icons/weaver.png"));
+    this.imgAlchemist = await loadImage(absolute('./resources/class-jobs-icons/alchemist.png'));
+    this.imgArmorer = await loadImage(absolute('./resources/class-jobs-icons/armorer.png'));
+    this.imgBlacksmith = await loadImage(absolute('./resources/class-jobs-icons/blacksmith.png'));
+    this.imgCarpenter = await loadImage(absolute('./resources/class-jobs-icons/carpenter.png'));
+    this.imgCulinarian = await loadImage(absolute('./resources/class-jobs-icons/culinarian.png'));
+    this.imgGoldsmith = await loadImage(absolute('./resources/class-jobs-icons/goldsmith.png'));
+    this.imgLeatherworker = await loadImage(absolute('./resources/class-jobs-icons/leatherworker.png'));
+    this.imgWeaver = await loadImage(absolute('./resources/class-jobs-icons/weaver.png'));
 
-    this.imgBotanist = await loadImage(absolute("./resources/class-jobs-icons/botanist.png"));
-    this.imgFisher = await loadImage(absolute("./resources/class-jobs-icons/fisher.png"));
-    this.imgMiner = await loadImage(absolute("./resources/class-jobs-icons/miner.png"));
+    this.imgBotanist = await loadImage(absolute('./resources/class-jobs-icons/botanist.png'));
+    this.imgFisher = await loadImage(absolute('./resources/class-jobs-icons/fisher.png'));
+    this.imgMiner = await loadImage(absolute('./resources/class-jobs-icons/miner.png'));
 
-    this.imgGladiator = await loadImage(absolute("./resources/class-jobs-icons/gladiator.png"));
-    this.imgPaladin = await loadImage(absolute("./resources/class-jobs-icons/paladin.png"));
-    this.imgMarauder = await loadImage(absolute("./resources/class-jobs-icons/marauder.png"));
-    this.imgWarrior = await loadImage(absolute("./resources/class-jobs-icons/warrior.png"));
-    this.imgDarkKnight = await loadImage(absolute("./resources/class-jobs-icons/darkknight.png"));
-    this.imgGunbreaker = await loadImage(absolute("./resources/class-jobs-icons/gunbreaker.png"));
+    this.imgGladiator = await loadImage(absolute('./resources/class-jobs-icons/gladiator.png'));
+    this.imgPaladin = await loadImage(absolute('./resources/class-jobs-icons/paladin.png'));
+    this.imgMarauder = await loadImage(absolute('./resources/class-jobs-icons/marauder.png'));
+    this.imgWarrior = await loadImage(absolute('./resources/class-jobs-icons/warrior.png'));
+    this.imgDarkKnight = await loadImage(absolute('./resources/class-jobs-icons/darkknight.png'));
+    this.imgGunbreaker = await loadImage(absolute('./resources/class-jobs-icons/gunbreaker.png'));
 
-    this.imgConjurer = await loadImage(absolute("./resources/class-jobs-icons/conjurer.png"));
-    this.imgWhitemage = await loadImage(absolute("./resources/class-jobs-icons/whitemage.png"));
-    this.imgScholar = await loadImage(absolute("./resources/class-jobs-icons/scholar.png"));
-    this.imgAstrologian = await loadImage(absolute("./resources/class-jobs-icons/astrologian.png"));
+    this.imgConjurer = await loadImage(absolute('./resources/class-jobs-icons/conjurer.png'));
+    this.imgWhitemage = await loadImage(absolute('./resources/class-jobs-icons/whitemage.png'));
+    this.imgScholar = await loadImage(absolute('./resources/class-jobs-icons/scholar.png'));
+    this.imgAstrologian = await loadImage(absolute('./resources/class-jobs-icons/astrologian.png'));
 
-    this.imgArcher = await loadImage(absolute("./resources/class-jobs-icons/archer.png"));
-    this.imgBard = await loadImage(absolute("./resources/class-jobs-icons/bard.png"));
-    this.imgMachinist = await loadImage(absolute("./resources/class-jobs-icons/machinist.png"));
-    this.imgDancer = await loadImage(absolute("./resources/class-jobs-icons/dancer.png"));
+    this.imgArcher = await loadImage(absolute('./resources/class-jobs-icons/archer.png'));
+    this.imgBard = await loadImage(absolute('./resources/class-jobs-icons/bard.png'));
+    this.imgMachinist = await loadImage(absolute('./resources/class-jobs-icons/machinist.png'));
+    this.imgDancer = await loadImage(absolute('./resources/class-jobs-icons/dancer.png'));
 
-    this.imgLancer = await loadImage(absolute("./resources/class-jobs-icons/lancer.png"));
-    this.imgDragoon = await loadImage(absolute("./resources/class-jobs-icons/dragoon.png"));
-    this.imgPugilist = await loadImage(absolute("./resources/class-jobs-icons/pugilist.png"));
-    this.imgMonk = await loadImage(absolute("./resources/class-jobs-icons/monk.png"));
-    this.imgRogue = await loadImage(absolute("./resources/class-jobs-icons/rogue.png"));
-    this.imgNinja = await loadImage(absolute("./resources/class-jobs-icons/ninja.png"));
-    this.imgSamurai = await loadImage(absolute("./resources/class-jobs-icons/samurai.png"));
+    this.imgLancer = await loadImage(absolute('./resources/class-jobs-icons/lancer.png'));
+    this.imgDragoon = await loadImage(absolute('./resources/class-jobs-icons/dragoon.png'));
+    this.imgPugilist = await loadImage(absolute('./resources/class-jobs-icons/pugilist.png'));
+    this.imgMonk = await loadImage(absolute('./resources/class-jobs-icons/monk.png'));
+    this.imgRogue = await loadImage(absolute('./resources/class-jobs-icons/rogue.png'));
+    this.imgNinja = await loadImage(absolute('./resources/class-jobs-icons/ninja.png'));
+    this.imgSamurai = await loadImage(absolute('./resources/class-jobs-icons/samurai.png'));
 
-    this.imgThaumaturge = await loadImage(absolute("./resources/class-jobs-icons/thaumaturge.png"));
-    this.imgBlackmage = await loadImage(absolute("./resources/class-jobs-icons/blackmage.png"));
-    this.imgArcanist = await loadImage(absolute("./resources/class-jobs-icons/arcanist.png"));
-    this.imgSummoner = await loadImage(absolute("./resources/class-jobs-icons/summoner.png"));
-    this.imgRedmage = await loadImage(absolute("./resources/class-jobs-icons/redmage.png"));
+    this.imgThaumaturge = await loadImage(absolute('./resources/class-jobs-icons/thaumaturge.png'));
+    this.imgBlackmage = await loadImage(absolute('./resources/class-jobs-icons/blackmage.png'));
+    this.imgArcanist = await loadImage(absolute('./resources/class-jobs-icons/arcanist.png'));
+    this.imgSummoner = await loadImage(absolute('./resources/class-jobs-icons/summoner.png'));
+    this.imgRedmage = await loadImage(absolute('./resources/class-jobs-icons/redmage.png'));
 
     this.imgBluemage = await loadImage(absolute('./resources/class-jobs-icons/bluemage.png'));
 
@@ -234,7 +234,7 @@ class CardCreator {
 
   async createCrest(crestAry) {
     const canvas = createCanvas(128, 128);
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
 
     if (crestAry.length == 0)
       return null;
@@ -311,7 +311,7 @@ class CardCreator {
 
   pad(num, size) {
     num = num.toString();
-    while (num.length < size) num = "0" + num;
+    while (num.length < size) num = '0' + num;
     return num;
   }
 
@@ -325,15 +325,15 @@ class CardCreator {
    * or a Buffer instance.
    * @param {string} [language] The language that the cards should be in use for the request
    * @example
-   * const fs = require("fs");
+   * const fs = require('fs');
    * 
    * const card = new CardCreator();
-   * const lodestoneId = "13821878";
+   * const lodestoneId = '13821878';
    * 
    * await card.ensureInit();
    * const png = await card.createCard(lodestoneId);
    * 
-   * fs.writeFile("./test.png", png, err => {
+   * fs.writeFile('./test.png', png, err => {
    *   if (err) console.error(err);
    * });
    * @returns {Promise<Buffer>} A promise representating the construction of the card's image data.
@@ -351,7 +351,7 @@ class CardCreator {
 
     const canvasSize = this.canvasSize;
     const canvas = createCanvas(canvasSize.width, canvasSize.height);
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
 
     const portrait = await loadImage(data.Character.Portrait);
 
@@ -386,7 +386,7 @@ class CardCreator {
     ctx.fillRect(rectStartX, rectStartRow5Y, rectFullWidth, rectHeightRow5);
     ctx.stroke();
 
-    ctx.textAlign = "center";
+    ctx.textAlign = 'center';
     ctx.font = med;
     ctx.fillStyle = primary;
 
@@ -398,7 +398,7 @@ class CardCreator {
 
     // Race, Clan, Guardian, GC, FC Titles
     ctx.font = small;
-    ctx.textAlign = "left";
+    ctx.textAlign = 'left';
     ctx.fillText(strings.raceAndClan, 480, infoTextSmallStartY);
     ctx.fillText(strings.guardian, 480, infoTextSmallStartY + infoTextSpacing);
     if (data.Character.GrandCompany.Company != null) {
@@ -422,16 +422,16 @@ class CardCreator {
     ctx.fillStyle = white;
     ctx.font = large;
 
-    ctx.textAlign = "center";
+    ctx.textAlign = 'center';
     // Chara Name
-    if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == "") {
+    if (data.Character.Title === undefined || data.Character.Title.Name == null || data.Character.Title.Name == '') {
       ctx.fillText(data.Character.Name, 450, 80);
     } else {
       ctx.fillText(data.Character.Name, 450, 80);
     }
     // Race, Clan, Guardian, GC, FC Info
     ctx.font = smed;
-    ctx.textAlign = "left";
+    ctx.textAlign = 'left';
     ctx.fillText(`${data.Character.Race.Name}, ${data.Character.Tribe.Name}`, 480, infoTextBigStartY);
 
     ctx.fillText(data.Character.GuardianDeity.Name, 480, infoTextBigStartY + infoTextSpacing);
@@ -506,7 +506,7 @@ class CardCreator {
 
     // Why are there so many fucking jobs in this game?
     // Crafting
-    ctx.textAlign = "center";
+    ctx.textAlign = 'center';
 
     var cJobsRowTextX = jobsRowTextStartX;
     ctx.drawImage(this.imgAlchemist, 480, jobsRowIcon3Y, 30, 30);
@@ -594,7 +594,7 @@ class CardCreator {
     if (data.Character.ClassJobs[9].Level >= 30) {
       ctx.fillText(data.Character.ClassJobs[9].Level, cJobsRowTextX, jobsRowText1Y);
     } else {
-      ctx.fillText("0", cJobsRowTextX, jobsRowText1Y);
+      ctx.fillText('0', cJobsRowTextX, jobsRowText1Y);
     }
     cJobsRowTextX += jobsRowTextSize;
 
@@ -676,12 +676,12 @@ class CardCreator {
     ctx.drawImage(this.imgBluemage, 780, jobsRowIcon2Y, 33, 33);
     ctx.fillText(data.Character.ClassJobs[17].Level, 796, jobsRowText2Y);
 
-    ctx.textAlign = "left";
+    ctx.textAlign = 'left';
     ctx.fillStyle = black;
     ctx.font = copyright;
 
     ctx.fillText(`© 2010 - ${this.copyrightYear} SQUARE ENIX CO., LTD. All Rights Reserved`, rectStartX, 720 - 5);
-    
+
     return canvas.toBuffer();
   }
 }
