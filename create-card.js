@@ -203,39 +203,35 @@ class CardCreator {
     ]);
   }
 
-  async createCrest(crestAry) {
+  async createCrest(crests) {
+    if (!Array.isArray(crests) || crests.length == 0) return null;
+
     const canvas = createCanvas(128, 128);
     const ctx = canvas.getContext('2d');
 
-    if (crestAry.length == 0)
-      return null;
+    const crestLayers = await Promise.all(crests.map(crest => loadImage(crest)));
 
-    for (let i = 0; i < crestAry.length; i++) {
-      const crestLayer = await loadImage(crestAry[i]);
-      ctx.drawImage(crestLayer, 0, 0, 128, 128);
+    for (const layer of crestLayers) {
+      ctx.drawImage(layer, 0, 0, 128, 128);
     }
 
-    const imgd = ctx.getImageData(0, 0, 128, 128),
-      pix = imgd.data,
-      newColor = { r: 0, g: 0, b: 0, a: 0 };
-
-    for (let i = 0, n = pix.length; i < n; i += 4) {
-      const r = pix[i],
-        g = pix[i + 1],
-        b = pix[i + 2];
-
-      // If its white then change it
+    const imageData = ctx.getImageData(0, 0, 128, 128);
+    const pixelData = imageData.data;
+    
+    // Iterate over all pixels, where one consists of 4 numbers: r, g, b and a
+    for (let index = 0; index < pixelData.length; index += 4) {
+      const [r, g, b] = pixelData.slice(index, index + 3);
+      
+      // If the pixel is a special grey, change it to be transparent (a = 0)
       if (r == 64 && g == 64 && b == 64) {
-        // Change the white to whatever.
-        pix[i] = newColor.r;
-        pix[i + 1] = newColor.g;
-        pix[i + 2] = newColor.b;
-        pix[i + 3] = newColor.a;
+        pixelData[index] = 0;
+        pixelData[index + 1] = 0;
+        pixelData[index + 2] = 0;
+        pixelData[index + 3] = 0;
       }
     }
 
-    ctx.putImageData(imgd, 0, 0);
-
+    ctx.putImageData(imageData, 0, 0);
     return canvas;
   }
 
