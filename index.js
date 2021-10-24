@@ -6,146 +6,136 @@ const fsStore = require('cache-manager-fs-binary');
 const { CardCreator } = require('./create-card');
 
 const port = process.env.PORT || 5000;
+const xivApiKey = typeof process.env.XIV_API_KEY === 'string' && process.env.XIV_API_KEY !== '' ? process.env.XIV_API_KEY : undefined;
+const supportedLanguages = ['en', 'ja', 'de', 'fr'];
 
 const app = express();
 const creator = new CardCreator();
 
 // Initialize caching on disk
 const diskCache = cacheManager.caching({
-    store: fsStore,
-    options: {
-        reviveBuffers: true,
-        binaryAsStream: false,
-        ttl: 60 * 60 * 4 /* seconds */,
-        maxsize: 1000 * 1000 * 1000 /* max size in bytes on disk */,
-        path: 'diskcache',
-        preventfill: true
-    }
+  store: fsStore,
+  options: {
+    reviveBuffers: true,
+    binaryAsStream: false,
+    ttl: 14400, // s = 4h
+    maxsize: 1000000000, // bytes = 1 GB
+    path: 'diskcache',
+    preventfill: true,
+  }
 });
 
-async function getCharIdByName(world, name, retries = 1) {
-    if (retries === -1) return undefined;
+async function getCharacterIdByName(world, name, retries = 1) {
+  if (retries === -1) return undefined;
 
-    const response = await fetch(`https://xivapi.com/character/search?name=${name}&server=${world}`);
-    const data = await response.json();
+  const searchUrl = new URL('https://xivapi.com/character/search');
+  searchUrl.searchParams.set('name', name)
+  searchUrl.searchParams.set('server', world)
+  if (xivApiKey != null) searchUrl.searchParams.set('private_key', xivApiKey)
 
-    if (data.Results[0] === undefined)
-        return getCharIdByName(world, name, --retries);
+  const response = await fetch(searchUrl.toString());
+  const data = await response.json();
 
-    return data.Results[0].ID;
+  if (data.Results[0] === undefined) return getCharacterIdByName(world, name, --retries);
+
+  return data.Results[0].ID;
 }
 
-app.get('/prepare/id/:charaId', async (req, res) => {
-    var cacheKey = `img:${req.params.charaId}`;
-    var ttl = 60 * 60 * 4; // 4 hours
+async function cacheCreateCard(characterId, customImage, language) {
+  const cacheKey = `img:${characterId}:${customImage}:${language}`;
 
-    diskCache.wrap(cacheKey,
-        // called if the cache misses in order to generate the value to cache
-        function (cb) {
-            creator.ensureInit().then(() => creator.createCard(req.params.charaId), (reason) => cb('Init failed: ' + reason, null)).then(image => cb(null, {
-                binary: {
-                    image: image,
-                }
-            })).catch((reason) => cb('createCard failed: ' + reason, null));
-        },
-        // Options, see node-cache-manager for more examples
-        { ttl: ttl },
-        function (err, result) {
-            if (err !== null) {
-                console.error(err);
-                res.status(500).send({status: "error", reason: err});
-                return;
-            }
+  return diskCache.wrap(cacheKey, async () => {
+    await creator.ensureInit().catch(error => { throw new Error(`Init failed with: ${error}`) });
+    const image = await creator.createCard(characterId, customImage, language).catch(error => { throw new Error(`Create card failed with: ${error}`) });
 
-            res.status(200).send({status: "ok", url: `/characters/id/${req.params.charaId}.png`});
-        }
-    );
-})
+    return {
+      binary: {
+        image,
+      },
+    };
+  });
+}
 
-app.get('/prepare/name/:world/:charName', async (req, res) => {
-    var id = await getCharIdByName(req.params.world, req.params.charName);
+function getOriginalQueryString(req) {
+  const url = new URL(req.originalUrl, 'http://example.org');
+  return url.search;
+}
 
-    if (id === undefined) {
-        res.status(404).send({status: "error", reason: "Character not found."});
-        return;
-    }
+app.get('/prepare/id/:characterId', (req, res, next) => {
+  const language = typeof req.query.lang === 'string' && supportedLanguages.includes(req.query.lang) ? req.query.lang : supportedLanguages[0];
 
-    res.redirect(`/prepare/id/${id}`);
-})
+  cacheCreateCard(req.params.characterId, null, language)
+    .then(() => {
+      res.status(200).json({
+        status: 'ok',
+        url: `/characters/id/${req.params.characterId}.png`,
+      });
+    })
+    .catch(next);
+});
 
-app.get('/characters/id/:charaId.png', async (req, res) => {
-    var cacheKey = `img:${req.params.charaId}`;
-    var ttl = 60 * 60 * 4; // 4 hours
+app.get('/prepare/name/:world/:characterName', (req, res, next) => {
+  getCharacterIdByName(req.params.world, req.params.characterName)
+    .then(characterId => {
+      if (characterId == null) {
+        res.status(404).send({ status: 'error', reason: 'Character not found.' });
+      } else {
+        res.redirect(`/prepare/id/${characterId}${getOriginalQueryString(req)}`);
+      }
+    })
+    .catch(next);
+});
 
-    diskCache.wrap(cacheKey,
-        // called if the cache misses in order to generate the value to cache
-        function (cb) {
-            creator.ensureInit().then(() => creator.createCard(req.params.charaId), (reason) => cb('Init failed: ' + reason, null)).then(image => cb(null, {
-                binary: {
-                    image: image,
-                }
-            })).catch((reason) => cb('createCard failed: ' + reason, null));
-        },
-        // Options, see node-cache-manager for more examples
-        { ttl: ttl },
-        function (err, result) {
-            if (err !== null) {
-                console.error(err);
-                res.status(500).send({status: "error", reason: err});
-                return;
-            }
+app.get('/characters/id/:characterId.png', (req, res, next) => {
+  const language = typeof req.query.lang === 'string' && supportedLanguages.includes(req.query.lang) ? req.query.lang : supportedLanguages[0];
 
-            var image = result.binary.image;
+  cacheCreateCard(req.params.characterId, null, language)
+    .then(result => {
+      const image = result.binary.image;
 
-            res.writeHead(200, {
-                'Content-Type': 'image/png',
-                'Content-Length': image.length,
-                'Cache-Control': 'public, max-age=14400'
-            });
+      res.writeHead(200, {
+        'Cache-Control': 'public, max-age=14400',
+        'Content-Length': Buffer.byteLength(image),
+        'Content-Type': 'image/png',
+      });
 
-            res.end(image, 'binary');
+      res.end(image, 'binary');
+    })
+    .catch(next);
+});
 
-            var usedStreams = ['image'];
-            // you have to do the work to close the unused files
-            // to prevent file descriptors leak
-            for (var key in result.binary) {
-                if (!result.binary.hasOwnProperty(key)) continue;
-                if (usedStreams.indexOf(key) < 0
-                    && result.binary[key] instanceof Stream.Readable) {
-                    if (typeof result.binary[key].close === 'function') {
-                        result.binary[key].close(); // close the stream (fs has it)
-                    } else {
-                        result.binary[key].resume(); // resume to the end and close
-                    }
-                }
-            }
-        }
-    );
-})
+app.get('/characters/id/:characterId', (req, res) => {
+  res.redirect(`/characters/id/${req.params.characterId}.png${getOriginalQueryString(req)}`);
+});
 
-app.get('/characters/id/:charaId', async (req, res) => {
-    res.redirect(`/characters/id/${req.params.charaId}.png`);
-})
+app.get('/characters/name/:world/:characterName.png', (req, res, next) => {
+  getCharacterIdByName(req.params.world, req.params.characterName)
+    .then(characterId => {
+      if (characterId == null) {
+        res.status(404).send({ status: 'error', reason: 'Character not found.' });
+      } else {
+        res.redirect(`/characters/id/${characterId}${getOriginalQueryString(req)}`);
+      }
+    })
+    .catch(next);
+});
 
-app.get('/characters/name/:world/:charName.png', async (req, res) => {
-    var id = await getCharIdByName(req.params.world, req.params.charName);
-
-    if (id === undefined) {
-        res.status(404).send({status: "error", reason: "Character not found."});
-        return;
-    }
-
-    res.redirect(`/characters/id/${id}.png`);
-})
-
-app.get('/characters/name/:world/:charName', async (req, res) => {
-    res.redirect(`/characters/name/${req.params.world}/${req.params.charName}.png`);
-})
+app.get('/characters/name/:world/:characterName', (req, res) => {
+  res.redirect(`/characters/name/${req.params.world}/${req.params.characterName}.png${getOriginalQueryString(req)}`);
+});
 
 app.get('/', async (req, res) => {
-    res.redirect('https://github.com/ArcaneDisgea/XIV-Character-Cards');
-})
+  res.redirect('https://github.com/xivapi/XIV-Character-Cards');
+});
+
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).json({
+    status: 'error',
+    reason: error instanceof Error ? error.stack : String(error),
+  });
+});
 
 app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}`)
-})
+  console.log(`Listening at http://localhost:${port}`);
+});
