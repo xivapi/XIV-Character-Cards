@@ -145,6 +145,6 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(port, () => {
-  creator.ensureInit();
   console.log(`Listening at http://localhost:${port}`);
+  creator.ensureInit().then(() => console.log('CardCreator initialization complete'));
 });
