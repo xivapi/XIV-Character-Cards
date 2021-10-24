@@ -116,7 +116,7 @@ class CardCreator {
    */
   constructor(xivApiKey = undefined) {
     this.xivApiKey = typeof xivApiKey === 'string' && xivApiKey !== '' ? xivApiKey : undefined;
-    this.isInit = false;
+    this.initPromise = null;
   }
 
   /**
@@ -143,12 +143,9 @@ class CardCreator {
    * @returns {Promise} A promise representing the initialization state of this generator.
    */
   async ensureInit() {
-    if (this.isInit) {
-      return;
-    }
-
-    await this.init();
-    this.isInit = true;
+    if (this.initPromise == null) this.initPromise = this.init();
+      
+    await this.initPromise;
   }
 
   async init() {
