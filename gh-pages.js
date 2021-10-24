@@ -1,6 +1,3 @@
-const ghpages = require("gh-pages");
-ghpages.publish("docs/", (err) => {
-    if (err) {
-        console.error(err);
-    }
-});
+const ghpages = require('gh-pages');
+
+ghpages.publish('docs/', error => { if (error) console.error(error) });
