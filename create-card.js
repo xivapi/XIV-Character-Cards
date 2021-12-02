@@ -313,7 +313,7 @@ class CardCreator {
       'Character.ActiveClassJob.UnlockedState.ID', 'Character.ClassJobs.*.Level', 'Character.ClassJobs.*.UnlockedState.ID', 'Character.ClassJobsBozjan.Level', 'Character.ClassJobsElemental.Level',
       'Character.DC', 'Character.FreeCompanyName', 'Character.GearSet.Gear', 'Character.GrandCompany.Company.Name', 'Character.GrandCompany.Rank.Icon', 'Character.GuardianDeity.Name',
       'Character.GuardianDeity.Icon', 'Character.Name', 'Character.Portrait', 'Character.Race.Name', 'Character.Tribe.Name', 'Character.Server', 'Character.Title.Name',
-      'FreeCompany.Crest', 'FreeCompany.Tag', 'Minions.*.dummy', 'Mounts.*.dummy',
+      'FreeCompany.Crest', 'FreeCompany.Tag', 'Minions', 'Mounts',
     ];
 
     const characterInfoUrl = new URL(`https://xivapi.com/character/${encodeURIComponent(characterId)}`)
@@ -437,8 +437,14 @@ class CardCreator {
 
     // Mounts & Minions
     {
-      const mountsPercentage = Math.ceil(((Mounts.length ?? 0) / this.mountCount) * 100);
-      const minionsPercentage = Math.ceil(((Minions.length ?? 0) / this.minionCount) * 100);
+      let minionsPercentage = "N/A"
+      let mountsPercentage = "N/A"
+      if (Minions != null) {
+        const minionsPercentage = Math.ceil(((Minions.length ?? 0) / this.minionCount) * 100);
+      }
+      if (Mounts != null) {
+        const mountsPercentage = Math.ceil(((Mounts.length ?? 0) / this.mountCount) * 100);
+      }
 
       ctx.font = smed;
       ctx.fillStyle = white;
