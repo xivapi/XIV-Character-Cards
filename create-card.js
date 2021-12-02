@@ -21,7 +21,7 @@ const med = '30px "Source Sans Pro"';
 const smed = '25px "Source Sans Pro"';
 const large = '45px "Source Sans Pro SemiBold"';
 
-const jobsRowTextStartX = 495;
+const jobsRowTextStartX = 485;
 const jobsRowTextSize = 30;
 const jobsRowTextSpacer = jobsRowTextSize * 2;
 
@@ -381,28 +381,30 @@ class CardCreator {
 
     // Draw non data dependent job icons
     {
-      ctx.drawImage(this.cjIcons.darkknight, 540, jobsRowIcon1Y, 30, 30); // Darkknight
-      ctx.drawImage(this.cjIcons.gunbreaker, 570, jobsRowIcon1Y, 30, 30); // Gunbreaker
-      ctx.drawImage(this.cjIcons.scholar, 660, jobsRowIcon1Y, 30, 30); // Scholar
-      ctx.drawImage(this.cjIcons.astrologian, 690, jobsRowIcon1Y, 30, 30); // Astrologian
+      ctx.drawImage(this.cjIcons.darkknight, 530, jobsRowIcon1Y, 30, 30); // Darkknight
+      ctx.drawImage(this.cjIcons.gunbreaker, 560, jobsRowIcon1Y, 30, 30); // Gunbreaker
+      ctx.drawImage(this.cjIcons.scholar, 650, jobsRowIcon1Y, 30, 30); // Scholar
+      ctx.drawImage(this.cjIcons.astrologian, 680, jobsRowIcon1Y, 30, 30); // Astrologian
+      ctx.drawImage(this.cjIcons.sage, 710, jobsRowIcon1Y, 30, 30); // Sage
 
-      ctx.drawImage(this.cjIcons.machinist, 780, jobsRowIcon1Y, 30, 30); // Machinist
-      ctx.drawImage(this.cjIcons.dancer, 810, jobsRowIcon1Y, 30, 30); // Dancer
-      ctx.drawImage(this.cjIcons.samurai, 570, jobsRowIcon2Y, 30, 30); // Samurai
-      ctx.drawImage(this.cjIcons.redmage, 690, jobsRowIcon2Y, 30, 30); // Redmage
-      ctx.drawImage(this.cjIcons.bluemage, 780, jobsRowIcon2Y, 33, 33); // Bluemage
+      ctx.drawImage(this.cjIcons.machinist, 800, jobsRowIcon1Y, 30, 30); // Machinist
+      ctx.drawImage(this.cjIcons.dancer, 830, jobsRowIcon1Y, 30, 30); // Dancer
+      ctx.drawImage(this.cjIcons.samurai, 560, jobsRowIcon2Y, 30, 30); // Samurai
+      ctx.drawImage(this.cjIcons.reaper, 590, jobsRowIcon2Y, 30, 30); // Reaper
+      ctx.drawImage(this.cjIcons.redmage, 710, jobsRowIcon2Y, 30, 30); // Redmage
+      ctx.drawImage(this.cjIcons.bluemage, 800, jobsRowIcon2Y, 33, 33); // Bluemage
 
-      ctx.drawImage(this.cjIcons.carpenter, 480, jobsRowIcon3Y, 30, 30); // Carpenter
-      ctx.drawImage(this.cjIcons.blacksmith, 510, jobsRowIcon3Y, 30, 30); // Blacksmith
-      ctx.drawImage(this.cjIcons.armorer, 540, jobsRowIcon3Y, 30, 30); // Armorer
-      ctx.drawImage(this.cjIcons.goldsmith, 570, jobsRowIcon3Y, 30, 30); // Goldsmith
-      ctx.drawImage(this.cjIcons.leatherworker, 600, jobsRowIcon3Y, 30, 30); // Leatherworker
-      ctx.drawImage(this.cjIcons.weaver, 630, jobsRowIcon3Y, 30, 30); // Weaver
-      ctx.drawImage(this.cjIcons.alchemist, 660, jobsRowIcon3Y, 30, 30); // Alchemist
-      ctx.drawImage(this.cjIcons.culinarian, 690, jobsRowIcon3Y, 30, 30); // Culinarian
-      ctx.drawImage(this.cjIcons.miner, 750, jobsRowIcon3Y, 30, 30); // Miner
-      ctx.drawImage(this.cjIcons.botanist, 780, jobsRowIcon3Y, 30, 30); // Botanist
-      ctx.drawImage(this.cjIcons.fisher, 810, jobsRowIcon3Y, 30, 30); // Fisher
+      ctx.drawImage(this.cjIcons.carpenter, 470, jobsRowIcon3Y, 30, 30); // Carpenter
+      ctx.drawImage(this.cjIcons.blacksmith, 500, jobsRowIcon3Y, 30, 30); // Blacksmith
+      ctx.drawImage(this.cjIcons.armorer, 530, jobsRowIcon3Y, 30, 30); // Armorer
+      ctx.drawImage(this.cjIcons.goldsmith, 560, jobsRowIcon3Y, 30, 30); // Goldsmith
+      ctx.drawImage(this.cjIcons.leatherworker, 590, jobsRowIcon3Y, 30, 30); // Leatherworker
+      ctx.drawImage(this.cjIcons.weaver, 620, jobsRowIcon3Y, 30, 30); // Weaver
+      ctx.drawImage(this.cjIcons.alchemist, 650, jobsRowIcon3Y, 30, 30); // Alchemist
+      ctx.drawImage(this.cjIcons.culinarian, 680, jobsRowIcon3Y, 30, 30); // Culinarian
+      ctx.drawImage(this.cjIcons.miner, 770, jobsRowIcon3Y, 30, 30); // Miner
+      ctx.drawImage(this.cjIcons.botanist, 800, jobsRowIcon3Y, 30, 30); // Botanist
+      ctx.drawImage(this.cjIcons.fisher, 830, jobsRowIcon3Y, 30, 30); // Fisher
     }
 
     // Draw info from character data
@@ -506,15 +508,15 @@ class CardCreator {
     // Classes & Jobs - data dependant job or class icons
     {
       const { ClassJobs } = Character;
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[0], 19, 'gladiator', 'paladin'), 480, jobsRowIcon1Y, 30, 30); // Gladiator/Paladin
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[1], 21, 'marauder', 'warrior'), 510, jobsRowIcon1Y, 30, 30); // Marauder/Warrior
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[8], 24, 'conjurer', 'whitemage'), 630, jobsRowIcon1Y, 30, 30); // Conjurer/Whitemage
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[11], 23, 'archer', 'bard'), 750, jobsRowIcon1Y, 30, 30); // Archer/Bard
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[5], 22, 'lancer', 'dragoon'), 480, jobsRowIcon2Y, 30, 30); // Lancer/Dragoon
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[4], 20, 'pugilist', 'monk'), 510, jobsRowIcon2Y, 30, 30); // Monk/Pugilist
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[6], 30, 'rogue', 'ninja'), 540, jobsRowIcon2Y, 30, 30); // Ninja/Rogue
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[14], 25, 'thaumaturge', 'blackmage'), 630, jobsRowIcon2Y, 30, 30); // Thaumaturge/Blackmage
-      ctx.drawImage(this.classOrJobIcon(ClassJobs[15], 27, 'arcanist', 'summoner'), 660, jobsRowIcon2Y, 30, 30); // Summoner/Arcanist
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[0], 19, 'gladiator', 'paladin'), 470, jobsRowIcon1Y, 30, 30); // Gladiator/Paladin
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[1], 21, 'marauder', 'warrior'), 500, jobsRowIcon1Y, 30, 30); // Marauder/Warrior
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[8], 24, 'conjurer', 'whitemage'), 620, jobsRowIcon1Y, 30, 30); // Conjurer/Whitemage
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[11], 23, 'archer', 'bard'), 770, jobsRowIcon1Y, 30, 30); // Archer/Bard
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[5], 22, 'lancer', 'dragoon'), 470, jobsRowIcon2Y, 30, 30); // Lancer/Dragoon
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[4], 20, 'pugilist', 'monk'), 500, jobsRowIcon2Y, 30, 30); // Monk/Pugilist
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[6], 30, 'rogue', 'ninja'), 530, jobsRowIcon2Y, 30, 30); // Ninja/Rogue
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[14], 25, 'thaumaturge', 'blackmage'), 650, jobsRowIcon2Y, 30, 30); // Thaumaturge/Blackmage
+      ctx.drawImage(this.classOrJobIcon(ClassJobs[15], 27, 'arcanist', 'summoner'), 680, jobsRowIcon2Y, 30, 30); // Summoner/Arcanist
     }
 
     // Classes & Jobs - levels
@@ -540,6 +542,8 @@ class CardCreator {
       ctx.fillText(ClassJobs[9].Level >= 30 ? ClassJobs[9].Level : '0', rowTextX, jobsRowText1Y); // Scholar
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[10].Level, rowTextX, jobsRowText1Y); // Astrologian
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(99, rowTextX, jobsRowText1Y); // Sage
       rowTextX += jobsRowTextSpacer;
       ctx.fillText(ClassJobs[11].Level, rowTextX, jobsRowText1Y); // Archer/Bard
       rowTextX += jobsRowTextSize;
@@ -556,6 +560,8 @@ class CardCreator {
       ctx.fillText(ClassJobs[6].Level, rowTextX, jobsRowText2Y); // Ninja/Rogue
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[7].Level, rowTextX, jobsRowText2Y); // Samurai
+      rowTextX += jobsRowTextSize;
+      ctx.fillText(99, rowTextX, jobsRowText2Y); // Reaper
       rowTextX += jobsRowTextSpacer;
       ctx.fillText(ClassJobs[14].Level, rowTextX, jobsRowText2Y); // Thaumaturge/Blackmage
       rowTextX += jobsRowTextSize;
@@ -563,7 +569,7 @@ class CardCreator {
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[16].Level, rowTextX, jobsRowText2Y); // Redmage
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[17].Level, 796, jobsRowText2Y); // Bluemage
+      ctx.fillText(ClassJobs[17].Level, 815, jobsRowText2Y); // Bluemage
 
       // Third row
       rowTextX = jobsRowTextStartX;
@@ -582,7 +588,7 @@ class CardCreator {
       ctx.fillText(ClassJobs[24].Level, rowTextX, jobsRowText3Y); // Alchemist
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[25].Level, rowTextX, jobsRowText3Y); // Culinarian
-      rowTextX += jobsRowTextSpacer;
+      rowTextX += jobsRowTextSpacer * 1.5;
       ctx.fillText(ClassJobs[26].Level, rowTextX, jobsRowText3Y); // Miner
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[27].Level, rowTextX, jobsRowText3Y); // Botanist
