@@ -166,9 +166,9 @@ class CardCreator {
       'alchemist', 'armorer', 'blacksmith', 'carpenter', 'culinarian', 'goldsmith', 'leatherworker', 'weaver',
       'botanist', 'fisher', 'miner',
       'gladiator', 'paladin', 'marauder', 'warrior', 'darkknight', 'gunbreaker',
-      'conjurer', 'whitemage', 'scholar', 'astrologian',
+      'conjurer', 'whitemage', 'scholar', 'astrologian', 'sage',
       'archer', 'bard', 'machinist', 'dancer',
-      'lancer', 'dragoon', 'pugilist', 'monk', 'rogue', 'ninja', 'samurai',
+      'lancer', 'dragoon', 'pugilist', 'monk', 'rogue', 'ninja', 'samurai', 'reaper',
       'thaumaturge', 'blackmage', 'arcanist', 'summoner', 'redmage',
       'bluemage',
     ];
