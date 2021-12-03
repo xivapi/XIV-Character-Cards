@@ -554,6 +554,7 @@ class CardCreator {
       ctx.fillStyle = white;
 
       const { ClassJobs } = Character;
+      console.log(ClassJobs)
 
       // First row
       let rowTextX = jobsRowTextStartX;
@@ -565,63 +566,63 @@ class CardCreator {
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[3].Level, rowTextX, jobsRowText1Y); // Gunbreaker
       rowTextX += jobsRowTextSpacer;
-      ctx.fillText(ClassJobs[8].Level, rowTextX, jobsRowText1Y); // Conjurer/Whitemage
+      ctx.fillText(ClassJobs[4].Level, rowTextX, jobsRowText1Y); // Conjurer/Whitemage
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[9].Level >= 30 ? ClassJobs[9].Level : '0', rowTextX, jobsRowText1Y); // Scholar
+      ctx.fillText(ClassJobs[5].Level >= 30 ? ClassJobs[9].Level : '0', rowTextX, jobsRowText1Y); // Scholar
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[10].Level, rowTextX, jobsRowText1Y); // Astrologian
+      ctx.fillText(ClassJobs[6].Level, rowTextX, jobsRowText1Y); // Astrologian
       rowTextX += jobsRowTextSize;
-      ctx.fillText(99, rowTextX, jobsRowText1Y); // Sage
+      ctx.fillText(ClassJobs[7].Level, rowTextX, jobsRowText1Y); // Sage
       rowTextX += jobsRowTextSpacer;
-      ctx.fillText(ClassJobs[11].Level, rowTextX, jobsRowText1Y); // Archer/Bard
+      ctx.fillText(ClassJobs[13].Level, rowTextX, jobsRowText1Y); // Archer/Bard
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[12].Level, rowTextX, jobsRowText1Y); // Machinist
+      ctx.fillText(ClassJobs[14].Level, rowTextX, jobsRowText1Y); // Machinist
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[13].Level, rowTextX, jobsRowText1Y); // Dancer
+      ctx.fillText(ClassJobs[15].Level, rowTextX, jobsRowText1Y); // Dancer
 
       // Second row
       rowTextX = jobsRowTextStartX;
-      ctx.fillText(ClassJobs[5].Level, rowTextX, jobsRowText2Y); // Lancer/Dragoon
+      ctx.fillText(ClassJobs[9].Level, rowTextX, jobsRowText2Y); // Lancer/Dragoon
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[4].Level, rowTextX, jobsRowText2Y); // Monk/Pugilist
+      ctx.fillText(ClassJobs[8].Level, rowTextX, jobsRowText2Y); // Monk/Pugilist
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[6].Level, rowTextX, jobsRowText2Y); // Ninja/Rogue
+      ctx.fillText(ClassJobs[10].Level, rowTextX, jobsRowText2Y); // Ninja/Rogue
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[7].Level, rowTextX, jobsRowText2Y); // Samurai
+      ctx.fillText(ClassJobs[11].Level, rowTextX, jobsRowText2Y); // Samurai
       rowTextX += jobsRowTextSize;
-      ctx.fillText(99, rowTextX, jobsRowText2Y); // Reaper
+      ctx.fillText(ClassJobs[12].Level, rowTextX, jobsRowText2Y); // Reaper
       rowTextX += jobsRowTextSpacer;
-      ctx.fillText(ClassJobs[14].Level, rowTextX, jobsRowText2Y); // Thaumaturge/Blackmage
+      ctx.fillText(ClassJobs[16].Level, rowTextX, jobsRowText2Y); // Thaumaturge/Blackmage
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[15].Level, rowTextX, jobsRowText2Y); // Summoner/Arcanist
+      ctx.fillText(ClassJobs[17].Level, rowTextX, jobsRowText2Y); // Summoner/Arcanist
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[16].Level, rowTextX, jobsRowText2Y); // Redmage
+      ctx.fillText(ClassJobs[18].Level, rowTextX, jobsRowText2Y); // Redmage
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[17].Level, 815, jobsRowText2Y); // Bluemage
+      ctx.fillText(ClassJobs[19].Level, 815, jobsRowText2Y); // Bluemage
 
       // Third row
       rowTextX = jobsRowTextStartX;
-      ctx.fillText(ClassJobs[18].Level, rowTextX, jobsRowText3Y); // Carpenter
+      ctx.fillText(ClassJobs[20].Level, rowTextX, jobsRowText3Y); // Carpenter
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[19].Level, rowTextX, jobsRowText3Y); // Blacksmith
+      ctx.fillText(ClassJobs[21].Level, rowTextX, jobsRowText3Y); // Blacksmith
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[20].Level, rowTextX, jobsRowText3Y); // Armorer
+      ctx.fillText(ClassJobs[22].Level, rowTextX, jobsRowText3Y); // Armorer
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[21].Level, rowTextX, jobsRowText3Y); // Goldsmith
+      ctx.fillText(ClassJobs[23].Level, rowTextX, jobsRowText3Y); // Goldsmith
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[22].Level, rowTextX, jobsRowText3Y); // Leatherworker
+      ctx.fillText(ClassJobs[24].Level, rowTextX, jobsRowText3Y); // Leatherworker
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[23].Level, rowTextX, jobsRowText3Y); // Weaver
+      ctx.fillText(ClassJobs[25].Level, rowTextX, jobsRowText3Y); // Weaver
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[24].Level, rowTextX, jobsRowText3Y); // Alchemist
+      ctx.fillText(ClassJobs[26].Level, rowTextX, jobsRowText3Y); // Alchemist
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[25].Level, rowTextX, jobsRowText3Y); // Culinarian
+      ctx.fillText(ClassJobs[27].Level, rowTextX, jobsRowText3Y); // Culinarian
       rowTextX += jobsRowTextSpacer * 1.5;
-      ctx.fillText(ClassJobs[26].Level, rowTextX, jobsRowText3Y); // Miner
+      ctx.fillText(ClassJobs[28].Level, rowTextX, jobsRowText3Y); // Miner
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[27].Level, rowTextX, jobsRowText3Y); // Botanist
+      ctx.fillText(ClassJobs[29].Level, rowTextX, jobsRowText3Y); // Botanist
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[28].Level, rowTextX, jobsRowText3Y); // Fisher
+      ctx.fillText(ClassJobs[30].Level, rowTextX, jobsRowText3Y); // Fisher
     }
 
     // Remaining asynchronous drawing
@@ -659,7 +660,7 @@ exports.CardCreator = CardCreator;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Dec 02 2021 14:35:19 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Dec 03 2021 15:38:56 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
