@@ -539,7 +539,7 @@ class CardCreator {
       rowTextX += jobsRowTextSpacer;
       ctx.fillText(ClassJobs[4].Level, rowTextX, jobsRowText1Y); // Conjurer/Whitemage
       rowTextX += jobsRowTextSize;
-      ctx.fillText(ClassJobs[5].Level >= 30 ? ClassJobs[9].Level : '0', rowTextX, jobsRowText1Y); // Scholar
+      ctx.fillText(ClassJobs[5].Level >= 30 ? ClassJobs[5].Level : '0', rowTextX, jobsRowText1Y); // Scholar
       rowTextX += jobsRowTextSize;
       ctx.fillText(ClassJobs[6].Level, rowTextX, jobsRowText1Y); // Astrologian
       rowTextX += jobsRowTextSize;
