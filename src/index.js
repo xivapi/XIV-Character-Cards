@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection,JSUnresolvedVariable,JSUnresolvedFunction
+
 const cacheManager = require('cache-manager');
 const express = require('express');
 const fetch = require('node-fetch');
@@ -29,8 +31,8 @@ const diskCache = cacheManager.caching({
 // Rate limit all requests that result in XIV API calls
 const limiter = rateLimit({
   windowMs: 1000, // ms = 1s
-  max: 20, // default XIV API request limit
-  keyGenerator: () => 'global',
+  max: 20,
+// default XIV API request limit
 });
 
 async function getCharacterIdByName(world, name, retries = 1) {
@@ -65,7 +67,7 @@ async function cacheCreateCard(characterId, customImage, language) {
 }
 
 function getOriginalQueryString(req) {
-  const url = new URL(req.originalUrl, 'http://example.org');
+  const url = new URL(req.originalUrl, 'https://example.org');
   return url.search;
 }
 
@@ -136,7 +138,7 @@ app.get('/', async (req, res) => {
   res.redirect('https://github.com/xivapi/XIV-Character-Cards');
 });
 
-app.use((error, req, res, next) => {
+app.use((error, req, res) => {
   console.error(error);
   res.status(500).json({
     status: 'error',

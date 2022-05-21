@@ -2,7 +2,7 @@
   "name": "xiv-character-cards",
   "description": "API to create fancy cards for FFXIV characters based on their Lodestone data, hosted at https://ffxiv-character-cards.herokuapp.com.",
   "version": "1.4.1",
-  "main": "create-card.js",
+  "main": "src/create-card.js",
   "repository": "https://github.com/xivapi/XIV-Character-Cards.git",
   "license": "AGPL-3.0-only",
   "keywords": [
@@ -10,10 +10,10 @@
     "xivapi"
   ],
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "docs:generate": "jsdoc create-card.js -d docs -R readme.md",
-    "docs:deploy": "npm run docs:generate && node gh-pages.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "docs:generate": "jsdoc src/create-card.js -d docs -R README.md",
+    "docs:deploy": "npm run docs:generate && node scripts/gh-pages.js"
   },
   "dependencies": {
     "cache-manager": "^3.4.4",
