@@ -11,7 +11,7 @@ async function example() {
 
 example()
     .then(card => {
-        writeFileSync(`./example/${lodestoneId}.png`, card);
+        writeFileSync(`./${lodestoneId}.png`, card);
     })
     .catch(error => {
         console.error('Creator initialization or card creation failed!');
