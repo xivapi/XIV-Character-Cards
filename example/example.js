@@ -1,5 +1,5 @@
 const { writeFileSync } = require("fs");
-const {CardCreator} = require("../create-card");
+const {CardCreator} = require("../src/create-card");
 
 const creator = new CardCreator();
 const lodestoneId = "13821878";
