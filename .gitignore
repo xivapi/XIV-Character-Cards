@@ -112,3 +112,4 @@ docs/
 package-lock.json
 .idea
 *.iml
+example/*.png
