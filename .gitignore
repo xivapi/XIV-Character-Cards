@@ -110,3 +110,5 @@ docs/
 # My additions
 
 package-lock.json
+.idea
+*.iml
