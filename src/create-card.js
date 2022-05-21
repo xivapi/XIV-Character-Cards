@@ -372,8 +372,6 @@ class CardCreator {
     ctx.restore(); ctx.save();
 
     // Draw non data dependent images
-    ctx.drawImage(this.images.shadow, 441 - 143, 110, 170, 90); // Item level shadow
-    ctx.drawImage(this.images.ilvl, 441 - 92, 132, 24, 27); // Item level icon
     ctx.drawImage(this.images.mount, 620, iconMountMinionY, 32, 32); // Mount icon
     ctx.drawImage(this.images.minion, 834, iconMountMinionY, 19, 32); // Minion icon
 
@@ -424,14 +422,6 @@ class CardCreator {
       ctx.font = large;
       ctx.fillStyle = white;
       ctx.fillText(Character.Name, 450, 80); // Character name
-      ctx.restore(); ctx.save();
-    }
-
-    // Item level
-    {
-      ctx.font = smed;
-      ctx.fillStyle = grey;
-      ctx.fillText(this.getItemLevel(Character.GearSet.Gear), 441 - 65, 155); // Item level
       ctx.restore(); ctx.save();
     }
 
@@ -605,6 +595,16 @@ class CardCreator {
           if (fcCrestIcon != null) ctx.drawImage(fcCrestIcon, fcCrestX, fcCrestY, fcCrestScale, fcCrestScale);
         }),
       ]);
+    }
+
+    // Item level
+    ctx.drawImage(this.images.shadow, 440 - 143, 110, 170, 90); // Item level shadow
+    ctx.drawImage(this.images.ilvl, 440 - 92, 132, 24, 27); // Item level icon
+    {
+      ctx.font = smed;
+      ctx.fillStyle = grey;
+      ctx.fillText(this.getItemLevel(Character.GearSet.Gear), 400, 155); // Item level
+      ctx.restore(); ctx.save();
     }
 
     return canvas.toBuffer();
