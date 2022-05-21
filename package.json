@@ -12,7 +12,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "docs:generate": "jsdoc create-card.js -d docs -R readme.md",
+    "docs:generate": "jsdoc create-card.js -d docs -R README.md",
     "docs:deploy": "npm run docs:generate && node gh-pages.js"
   },
   "dependencies": {
