@@ -92,6 +92,18 @@ const languageStrings = {
     mounts: 'Mounts',
     minions: 'Minions',
   },
+  ja: {
+    raceAndClan: '種族/部族',
+    guardian: '守護神',
+    grandCompany: '所属グランドカンパニー',
+    freeCompany: '所属フリーカンパニー',
+    elementalLevel: 'エレメンタルレベル',
+    eurekaLevel: 'LEVEL',
+    resistanceRank: 'レジスタンスランク',
+    bozjaRank: 'LEVEL',
+    mounts: 'マウント',
+    minions: 'ミニオン',
+  },
   de: {
     raceAndClan: 'Volk & Stamm',
     guardian: 'Schutzgott',
@@ -103,6 +115,18 @@ const languageStrings = {
     bozjaRank: 'Widerstandsstufe',
     mounts: 'Reittiere',
     minions: 'Begleiter',
+  },
+  fr: {
+    raceAndClan: 'Race & Ethnie',
+    guardian: 'Divinité',
+    grandCompany: 'Grande compagnie',
+    freeCompany: 'Compagnie libre',
+    elementalLevel: 'Niveau élémentaire',
+    eurekaLevel: 'Niveau',
+    resistanceRank: 'Niveau de résistant',
+    bozjaRank: 'Niveau',
+    mounts: 'Montures',
+    minions: 'Mascottes',
   },
 };
 
