@@ -442,10 +442,10 @@ class CardCreator {
       let minionsPercentage = "N/A"
       let mountsPercentage = "N/A"
       if (Minions != null) {
-        const minionsPercentage = Math.ceil(((Minions.length ?? 0) / this.minionCount) * 100);
+        minionsPercentage = Math.ceil(((Minions.length ?? 0) / this.minionCount) * 100);
       }
       if (Mounts != null) {
-        const mountsPercentage = Math.ceil(((Mounts.length ?? 0) / this.mountCount) * 100);
+        mountsPercentage = Math.ceil(((Mounts.length ?? 0) / this.mountCount) * 100);
       }
 
       ctx.font = smed;
