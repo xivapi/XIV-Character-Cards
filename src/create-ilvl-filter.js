@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 const fetch = require('node-fetch');
 
 const itemUICategory = [
