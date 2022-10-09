@@ -331,7 +331,7 @@ class CardCreator {
     const customImagePromise = customImage != null ? loadImage(customImage) : Promise.resolve();
     const portraitPromise = dataPromise.then(data => loadImage(data.Character.Portrait));
     const deityPromise = dataPromise.then(data => loadImage(`https://xivapi.com/${data.Character.GuardianDeity.Icon}`));
-    const gcRankPromise = dataPromise.then(data => data.Character.GrandCompany.Company != null ? loadImage(`https://xivapi.com/${data.Character.GrandCompany.Rank.Icon}`) : null);
+    const gcRankPromise = dataPromise.then(data => data.Character.GrandCompany.Company != null && data.Character.GrandCompany.Company.Name != null ? loadImage(`https://xivapi.com/${data.Character.GrandCompany.Rank.Icon}`) : null);
     const fcCrestPromise = dataPromise.then(data => data.Character.FreeCompanyName != null ? this.createCrest(data.FreeCompany.Crest) : null);
 
     // Build canvas and only await data, when actually needed
@@ -469,7 +469,7 @@ class CardCreator {
       ctx.fillText(`${Character.Race.Name}, ${Character.Tribe.Name}`, 480, infoTextBigStartY); // Race & Clan
       ctx.fillText(Character.GuardianDeity.Name, 480, infoTextBigStartY + infoTextSpacing); // Guardian
 
-      if (Character.GrandCompany.Company != null) {
+      if (Character.GrandCompany.Company != null && Character.GrandCompany.Company.Name != null) {
         ctx.font = small;
         ctx.fillStyle = primary;
         ctx.fillText(strings.grandCompany, 480, infoTextSmallStartY + infoTextSpacing * 2); // Grand Company
