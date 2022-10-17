@@ -181,7 +181,7 @@ class CardCreator {
     });
 
     const jobBackgroundsPromise = Promise.all(
-      Array.from({ length: 38 }, (_, index) => loadImage(absolute(`./resources/class-jobs-backgrounds/${index + 1}.png`)))
+      Array.from({ length: 40 }, (_, index) => loadImage(absolute(`./resources/class-jobs-backgrounds/${index + 1}.png`)))
     ).then(images => this.jobBackgrounds = images);
 
     const ilevelFilterPromise = createIlvlFilter(this.xivApiKey).then(filterIds => this.ilvlFilterIds = filterIds);
