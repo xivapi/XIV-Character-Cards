@@ -3,23 +3,23 @@
 ![npm Version](https://img.shields.io/npm/v/xiv-character-cards)
 [![Documentation](https://img.shields.io/badge/docs-JSDoc-orange)](https://xivapi.github.io/XIV-Character-Cards/)
 
-Library and API to create fancy cards for FFXIV characters based on their Lodestone data, powered by [xivapi.com](https://xivapi.com/) and hosted at [https://ffxiv-character-cards.herokuapp.com](https://ffxiv-character-cards.herokuapp.com).
+Library and API to create fancy cards for FFXIV characters based on their Lodestone data, powered by [xivapi.com](https://xivapi.com/) and hosted at [https://xiv-character-cards.drakon.cloud](https://xiv-character-cards.drakon.cloud).
 
-![Demo image](https://ffxiv-character-cards.herokuapp.com/characters/id/9575452.png)
+![Demo image](https://xiv-character-cards.drakon.cloud/characters/id/9575452.png)
 
 ## API
 
 All API calls support the `lang` query parameter to create a character card with information in the specified language. The supported languages are the same as [xivapi.com](https://xivapi.com/docs/Common-Features#language), which are English (en), Japanese (ja), German (de) and French (fr).
 
-E.g. a request for a german character card would look like this: ``https://ffxiv-character-cards.herokuapp.com/characters/id/<LODESTONE ID>.png?lang=de``
+E.g. a request for a german character card would look like this: ``https://xiv-character-cards.drakon.cloud/characters/id/<LODESTONE ID>.png?lang=de``
 
 ### Getting a card for a character by its Lodestone ID
 
-``GET https://ffxiv-character-cards.herokuapp.com/characters/id/<LODESTONE ID>.png``
+``GET https://xiv-character-cards.drakon.cloud/characters/id/<LODESTONE ID>.png``
 
 ### Getting card for a character by its world and name
 
-``GET https://ffxiv-character-cards.herokuapp.com/characters/name/<WORLD>/<CHARACTER NAME>.png``
+``GET https://xiv-character-cards.drakon.cloud/characters/name/<WORLD>/<CHARACTER NAME>.png``
 <br>**Note:** This is considerably slower than the creation by ID, since the character has to be looked up in the Lodestone first.
 
 <br>
@@ -29,11 +29,11 @@ If you are using this API together with an application that requires the API to 
 
 ### Requesting a card to be cached for a character by its Lodestone ID
 
-``GET https://ffxiv-character-cards.herokuapp.com/prepare/id/<LODESTONE ID>``
+``GET https://xiv-character-cards.drakon.cloud/prepare/id/<LODESTONE ID>``
 
 ### Requesting a card to be cached for a character by its world and name
 
-``GET https://ffxiv-character-cards.herokuapp.com/prepare/name/<WORLD>/<CHARACTER NAME>``
+``GET https://xiv-character-cards.drakon.cloud/prepare/name/<WORLD>/<CHARACTER NAME>``
 
 ## Library
 
